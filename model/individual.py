@@ -4,10 +4,13 @@ from operator import add
 
 class Individual(object):
 
-	def __init__(self, res):
+	def __init__(self):
 		self.vigilance = float(0.5)
 		self.coordinates = [-1,-1]
 		self.mutant = None
+		self.resources = None
+		self.competition = None
+		self.storage = 0
 
 	def placeOnGrid(self, m):
 		self.coordinates = [random.randint(1, m), random.randint(1, m)]
