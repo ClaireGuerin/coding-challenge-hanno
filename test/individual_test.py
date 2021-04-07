@@ -25,3 +25,42 @@ class TestIndividualObject(object):
 		assert len(self.ind.coordinates) == 2
 		assert type(self.ind.coordinates[0]) is int
 		assert type(self.ind.coordinates[1]) is int
+
+	def test_individual_gets_initial_coord(self):
+		self.ind = Ind()
+
+		assert hasattr(self.ind, "placeOnGrid"), "individual cannot be placed on initial grid"
+		self.ind.placeOnGrid(m=3)
+
+		assert self.ind.coordinates != [-1,-1]
+		assert self.ind.coordinates[0] > 0
+		assert self.ind.coordinates[1] > 0
+
+	def test_initial_coordinates_fit_on_grid(self):
+		self.ind = Ind()
+
+		# 3*3 grid
+		size = 3
+		self.ind.placeOnGrid(m=size)
+
+		assert self.ind.coordinates[0] <= size
+		assert self.ind.coordinates[1] <= size
+
+		# 10*10 grid
+		size = 10
+		self.ind.placeOnGrid(m=size)
+
+		assert self.ind.coordinates[0] <= size
+		assert self.ind.coordinates[1] <= size
+
+	# def test_initial_coordinates_uniform(self):
+	# 	hcoord = [-1]*100
+	# 	vcoord = [-1]*100
+
+	# 	for i in range(100):
+	# 		ind = Ind()
+	# 		ind.placeOnGrid(m=3)
+	# 		hcoord[i] = ind.coordinates[0]
+	# 		vcoord[i] = ind.coordinates[1]
+
+
