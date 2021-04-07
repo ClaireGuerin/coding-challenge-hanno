@@ -8,8 +8,6 @@ class Individual(object):
 		self.vigilance = float(0.5)
 		self.coordinates = [-1,-1]
 		self.mutant = None
-		self.resources = None
-		self.competition = None
 		self.storage = 0
 
 	def placeOnGrid(self, m):
@@ -44,5 +42,7 @@ class Individual(object):
 		predationRisk = p * (1 - self.vigilance)
 		self.alive = bool(rd.binomial(1, 1-predationRisk))
 
-	def consume(self):
-		pass
+	def gather(self, resources, share, efficiency):
+		# share = SUM(1-v_i)/(gamma*n)
+		# where gamma is the competition parameter
+		self.storage += efficiency * resources * share
