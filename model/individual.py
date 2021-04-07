@@ -4,7 +4,7 @@ from operator import add
 
 class Individual(object):
 
-	def __init__(self):
+	def __init__(self, res):
 		self.vigilance = float(0.5)
 		self.coordinates = [-1,-1]
 		self.mutant = None
