@@ -1,4 +1,5 @@
 import model.filemanip as fman
+from model.individual import Individual as Ind
 
 class Population(object):
 
@@ -7,6 +8,9 @@ class Population(object):
 		vals = fman.extractColumnFromFile(par, 1, int)
 		for attr,val in zip(attrs, vals):
 			setattr(self, attr, val)
+
+	def create(self, n):
+		self.individuals = [Ind()]*n
 
 
 	def launch(self):

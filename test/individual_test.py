@@ -63,4 +63,3 @@ class TestIndividualObject(object):
 	# 		hcoord[i] = ind.coordinates[0]
 	# 		vcoord[i] = ind.coordinates[1]
 
-
