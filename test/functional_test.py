@@ -44,5 +44,6 @@ class TestSimpleRun(object):
 			lineCount = len(fOut.readlines())
 
 		assert lineCount == 10, "wrong number of lines from file reading"
+		os.remove('vigilance_out.txt')
 
 	# A message is generated, informing the user that the simulation has successfully completed.
