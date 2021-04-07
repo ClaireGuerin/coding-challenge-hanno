@@ -24,9 +24,14 @@ class TestSimpleRun(object):
 		except AttributeError as e:
 			assert False, "population has no launching method"
 
-	# The simulation runs for the number of generations given in paramaters
+	# The simulation runs for the number of generations given in paramaters. An output file is created with information on vigilance level in the population
 
-	# An output file is created with information on vigilance level in the population
+	def test_simulation_runs_for_n_gen(self):
+		self.population = Pop()
+		self.population.launch()
+		self.filesListRootOut = os.listdir(".")
+
+		assert "vigilance_out.txt" in self.filesListRootOut, "no output file"
 
 	# The output file contains exactly the number of lines that corresponds to the number of generations
 
