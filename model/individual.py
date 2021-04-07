@@ -1,5 +1,6 @@
 import random
 import numpy.random as rd
+from operator import add
 
 class Individual(object):
 
@@ -30,3 +31,7 @@ class Individual(object):
 		else:
 			boundedphen = min(max(unboundedphen,0.0),1.0)
 			setattr(self, "vigilance", boundedphen)
+
+	def explore(self, m):
+		steps = [random.randint(-1, 1), random.randint(-1, 1)]
+		self.coordinates = list(map(add, self.coordinates, steps))
