@@ -1,6 +1,7 @@
 import pytest
 from model.individual import Individual as Ind
 import scipy.stats as scistats
+import random
 
 class TestSurvivalFeature(object):
 
@@ -36,7 +37,7 @@ class TestSurvivalFeature(object):
 
 	def test_average_survival_for_intermediate_vigilance(self):
 		self.ind = Ind()
-		self.ind.vigilance = 0.5
+		self.ind.vigilance = random.random()
 		
 		deathCount = 0
 		sampleSize = 1000
@@ -46,7 +47,7 @@ class TestSurvivalFeature(object):
 			if not self.ind.alive:
 				deathCount += 1
 
-		stat1, pval1 = scistats.ttest_1samp([1] * deathCount + [0] * (sampleSize - deathCount), self.ind.vigilance)
-		assert pval1 > 0.05, "T-test mean failed. Observed: {0}, Expected: {1}".format(deathCount/sampleSize, self.ind.vigilance)
-		self.test = scistats.binom_test(deathCount, sampleSize, self.ind.vigilance, alternative = "two-sided")
-		assert self.test > 0.05, "Success rate = {0} when predation rate = {1}".format(self.mutantCount/self.nIndividuals, self.ind.vigilance)
+		stat1, pval1 = scistats.ttest_1samp([1] * deathCount + [0] * (sampleSize - deathCount), 1 - self.ind.vigilance)
+		assert pval1 > 0.05, "T-test mean failed. Observed: {0}, Expected: {1}".format(deathCount/sampleSize, 1 - self.ind.vigilance)
+		self.test = scistats.binom_test(deathCount, sampleSize, 1 - self.ind.vigilance, alternative = "two-sided")
+		assert self.test > 0.05, "Success rate = {0} when predation rate = {1}".format(self.mutantCount/self.nIndividuals, 1 - self.ind.vigilance)
