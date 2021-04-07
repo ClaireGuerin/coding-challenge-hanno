@@ -36,4 +36,13 @@ class TestSimpleRun(object):
 
 	# The output file contains exactly the number of lines that corresponds to the number of generations
 
+	def test_simulation_runs_for_exact_generations(self):
+		self.population = Pop(par="test/test/parameters.txt")
+		self.population.launch()
+
+		with open("vigilance_out.txt", "r") as fOut:
+			lineCount = len(fOut.readlines())
+
+		assert lineCount == 10, "wrong number of lines from file reading"
+
 	# A message is generated, informing the user that the simulation has successfully completed.
