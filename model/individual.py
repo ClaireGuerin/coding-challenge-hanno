@@ -34,4 +34,5 @@ class Individual(object):
 
 	def explore(self, m):
 		steps = [random.randint(-1, 1), random.randint(-1, 1)]
-		self.coordinates = list(map(add, self.coordinates, steps))
+		unboundedCoordinates = list(map(add, self.coordinates, steps))
+		self.coordinates = list(map(lambda x: min(max(x,1),m), unboundedCoordinates))

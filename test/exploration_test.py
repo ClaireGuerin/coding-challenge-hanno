@@ -42,3 +42,35 @@ class TestExplorationFunction(object):
 
 		assert all([x in [-1,0,1] for x in storeStepsH]), "wrong horizontal step size in {0}".format(storeStepsH)
 		assert all([x in [-1,0,1] for x in storeStepsV]), "wrong vertical step size"
+
+	def test_steps_are_bounded(self):
+		self.ind = Ind()
+		gridSide = 6
+
+		self.ind.coordinates = [1,1]
+
+		storeCoordH = []
+		storeCoordV = []
+		
+		for i in range(10):
+			self.ind.explore(m=gridSide)
+			storeCoordH.append(self.ind.coordinates[0])
+			storeCoordV.append(self.ind.coordinates[1])
+
+		assert all([1 <= x <= gridSide for x in storeCoordH]), "stepped out of grid: {0}".format(storeCoordH)
+		assert all([1 <= x <= gridSide for x in storeCoordV]), "stepped out of grid: {0}".format(storeCoordV)
+
+		# reset for upper boundary
+
+		self.ind.coordinates = [gridSide,gridSide]
+
+		storeCoordH = []
+		storeCoordV = []
+		
+		for i in range(10):
+			self.ind.explore(m=gridSide)
+			storeCoordH.append(self.ind.coordinates[0])
+			storeCoordV.append(self.ind.coordinates[1])
+
+		assert all([1 <= x <= gridSide for x in storeCoordH]), "stepped out of grid: {0}".format(storeCoordH)
+		assert all([1 <= x <= gridSide for x in storeCoordV]), "stepped out of grid: {0}".format(storeCoordV)
