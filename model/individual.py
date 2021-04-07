@@ -37,5 +37,6 @@ class Individual(object):
 		unboundedCoordinates = list(map(add, self.coordinates, steps))
 		self.coordinates = list(map(lambda x: min(max(x,1),m), unboundedCoordinates))
 
-	def survive(self):
-		pass
+	def survive(self, p):
+		predationRisk = p * (1 - self.vigilance)
+		self.alive = bool(rd.binomial(1, 1-predationRisk))
