@@ -35,9 +35,9 @@ install:
 script:
   - python -m pytest --cov --cov-report html
   
-# codecov token. Apparently unnecessary with Travis-CI
-#env:
-#  - CODECOV_TOKEN=c5829cea-c917-4312-8240-cc9b731863f0
+# codecov token. Apparently unnecessary with Travis-CI?
+env:
+  - CODECOV_TOKEN=31e10aac-ab45-40d4-bfd9-aea7a97c03a7
   
 ## HEADOUT ##
 after_success:
