@@ -32,6 +32,7 @@ class TestSimpleRun(object):
 		self.filesListRootOut = os.listdir(".")
 
 		assert "vigilance_out.txt" in self.filesListRootOut, "no output file"
+		os.remove('vigilance_out.txt')
 
 	# The output file contains exactly the number of lines that corresponds to the number of generations
 

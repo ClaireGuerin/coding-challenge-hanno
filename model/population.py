@@ -4,5 +4,5 @@ class Population(object):
 		pass
 
 	def launch(self):
-		with open("vigilance_out.txt") as f:
-			f.write('')
+		with open("vigilance_out.txt", "w") as f:
+			f.write('I wrote something')
