@@ -13,7 +13,8 @@ branches:
 dist: xenial # required for Python >= 3.7
 
 # Disable sudo to speed up the build
-sudo: false
+# DEPRECATED
+#sudo: false
 
 # Set the build language to python
 language: python
