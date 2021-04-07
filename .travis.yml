@@ -1,0 +1,52 @@
+# blocklist
+#branches:
+#  except:
+#  - migration-feature
+
+# safelist
+branches:
+  only:
+  - main
+  - develop
+  
+## INSTALL ##
+dist: xenial # required for Python >= 3.7
+
+# Disable sudo to speed up the build
+sudo: false
+
+# Set the build language to python
+language: python
+
+# Set the python version(s)
+python:
+  - "3.7"
+  
+# commands to install dependencies through pip
+cache: pip
+install:
+  # needs a file called requirements.txt in the repo with the name of the dependencies to install
+  - pip install --upgrade pytest
+  - pip install -r requirements.txt
+  - pip install codecov
+
+## SCRIPT ##
+# command to run tests
+script:
+  - python -m pytest --cov --cov-report html
+  
+# codecov token. Apparently unnecessary with Travis-CI
+#env:
+#  - CODECOV_TOKEN=c5829cea-c917-4312-8240-cc9b731863f0
+  
+## HEADOUT ##
+after_success:
+  - codecov
+
+notifications:
+  email:
+    recipients:
+      - guerin.claire01@gmail.com
+    on_success: change # default: change
+    on_failure: change # default: always
+
