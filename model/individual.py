@@ -36,3 +36,6 @@ class Individual(object):
 		steps = [random.randint(-1, 1), random.randint(-1, 1)]
 		unboundedCoordinates = list(map(add, self.coordinates, steps))
 		self.coordinates = list(map(lambda x: min(max(x,1),m), unboundedCoordinates))
+
+	def survive(self):
+		pass
