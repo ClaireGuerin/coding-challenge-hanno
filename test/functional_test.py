@@ -5,7 +5,7 @@ class TestSimpleRun(object):
 
 	# The user gives a number of parameters necessary to run the simulation
 	def test_there_is_a_parameter_file(self):
-		self.filesListRoot = os.listdir("../")
+		self.filesListRoot = os.listdir(".")
 		assert "parameters.txt" in self.filesListRoot, "parameter file missing in root"
 
 	# A grid is created
