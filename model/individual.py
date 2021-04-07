@@ -40,3 +40,6 @@ class Individual(object):
 	def survive(self, p):
 		predationRisk = p * (1 - self.vigilance)
 		self.alive = bool(rd.binomial(1, 1-predationRisk))
+
+	def consume(self):
+		pass
