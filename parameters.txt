@@ -1,0 +1,2 @@
+gridSize,3
+nIndiv,10

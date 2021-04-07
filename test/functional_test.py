@@ -1,5 +1,6 @@
 import pytest
 import os
+from model.population import Population as Pop
 
 class TestSimpleRun(object):
 
@@ -15,6 +16,13 @@ class TestSimpleRun(object):
 	# A population of prey individuals is created, of the size given in parameters
 
 	# The user launches the simulation
+	def test_simulation_can_be_launched(self):
+		self.population = Pop()
+
+		try:
+		 	self.population.launch()
+		except AttributeError as e:
+			assert False, "population has no launching method"
 
 	# The simulation runs for the number of generations given in paramaters
 
