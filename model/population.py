@@ -12,6 +12,9 @@ class Population(object):
 	def create(self, n):
 		self.individuals = [Ind()]*n
 
+	def lifeCycle(self):
+		pass
+
 
 	def launch(self):
 		with open("vigilance_out.txt", "w") as f:

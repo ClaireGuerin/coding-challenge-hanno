@@ -28,3 +28,7 @@ class TestPopulationObject(object):
 		assert len(self.pop.individuals) == d2
 		for i in self.pop.individuals:
 			assert type(i) is Ind
+
+	def test_population_has_life_cycle(self):
+		assert hasattr(Pop(), "lifeCycle")
+		assert callable(getattr(Pop(), "lifeCycle"))
