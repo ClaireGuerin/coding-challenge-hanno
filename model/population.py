@@ -25,7 +25,38 @@ class Population(object):
 		for ind in self.individuals:
 			ind.explore()
 			self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
-			self.vcell[ind.coordinates[0], ind.coordinates[1]] += (1 - ind.vigilance)
+			self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
+
+	def gatherAndSurvive(self):
+
+		for ind in self.individuals:
+			res = self.grid.resources[ind.coordinates[0], ind.coordinates[1]]
+			share = self.grid.share[ind.coordinates[0], ind.coordinates[1]]
+
+			ind.gather(resources=float(res), share=share, efficiency=self.efficiency)
+			ind.survive(p = self.predation)
+
+	def routine(self):
+		
+		self.explore()
+
+		# share in a cell S = SUM(1-v_i)/(gamma*n)
+		# where gamma is the competition parameter
+		# WARNING: some of the cells might be unoccupied, leading to a division by zero in our case.
+		# here, divisions by zero are treated as zeroes
+		divider = self.ncell * self.competition
+		shares = np.true_divide(self.vcell, divider, out=np.zeros_like(self.vcell), where=divider!=0)
+		self.grid.share = shares
+		self.gatherAndSurvive()
+
+		# resources in a cell deprecate as individuals share them
+		# R * (1 - alpha * S) * r
+		# where alpha is the efficiency of resource extraction
+		# where r is the natural growth rate of resources
+		# where S is the shares as calculated previously
+		resourceGrowth = self.grid.resources * self.growth
+		resourceConsumption = 1 - self.efficiency * shares
+		self.grid.resources = resourceGrowth * resourceConsumption
 
 
 	def lifeCycle(self):	

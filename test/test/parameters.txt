@@ -3,4 +3,7 @@ nIndiv,10
 nGen,10
 initRes,0.5
 efficiency,0.8
+predation,0.3
+competition,1.1
+growth,1.1
 fecundity,2

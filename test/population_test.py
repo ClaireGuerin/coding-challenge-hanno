@@ -103,7 +103,7 @@ class TestPopulationObject(object):
 
 	def test_population_exploration_leads_to_change_in_coord(self):
 		self.pop = Pop("test/test/parameters.txt")
-		self.pop.create(n=1000)
+		self.pop.create(n=10)
 
 		coordH = []
 		coordV = []
@@ -136,3 +136,48 @@ class TestPopulationObject(object):
 		assert hasattr(self.pop, "vcell")
 		assert type(self.pop.vcell) is np.ndarray
 		assert self.pop.vcell.shape == (m,m)
+
+	def test_only_live_individuals_explore(self):
+		assert False, "write this test"
+
+	def test_population_can_gather_vs_survive(self):
+		assert hasattr(Pop(), "gatherAndSurvive")
+		assert callable(getattr(Pop(), "gatherAndSurvive"))
+
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		try:
+			self.pop.gatherAndSurvive()
+		except ValueError as e:
+			assert False, "missing info: {0}".format(e)
+
+	def test_population_has_a_routine(self):
+		assert hasattr(Pop(), "routine")
+		assert callable(getattr(Pop(), "routine"))
+
+	def test_population_routine_changes_share_grid(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+
+		shareG = self.pop.grid.share
+
+		self.pop.routine()
+
+		compareGrids = self.pop.grid.share != shareG
+
+		assert compareGrids.all()
+
+	def test_population_routine_changes_resources_grid(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+
+		resG = self.pop.grid.resources
+
+		self.pop.routine()
+
+		compareGrids = self.pop.grid.resources != resG
+
+		assert compareGrids.all()
+
+	def test_reproduction_at_population_level(self):
+		

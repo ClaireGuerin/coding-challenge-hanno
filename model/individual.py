@@ -38,6 +38,8 @@ class Individual(object):
 		setattr(self, "coordinates", tmpcoord)
 
 	def survive(self, p):
+		# p is the basal predation risk, i.e. the probability to get eaten in absence of vigilance
+		# 0 <= p <= 1
 		predationRisk = p * (1 - self.vigilance)
 		self.alive = bool(rd.binomial(1, 1-predationRisk))
 
