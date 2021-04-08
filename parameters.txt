@@ -1,3 +1,12 @@
-gridSize,3
-nIndiv,10
-nGen,10
+gridSize,10
+nIndiv,80
+nGen,100
+routineSteps,4
+mutRate,0.1
+mutStep,0.02
+initRes,2.0
+efficiency,0.9
+predation,0.3
+competition,1.0
+growth,1.1
+fecundity,2.0

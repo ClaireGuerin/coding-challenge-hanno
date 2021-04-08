@@ -3,14 +3,18 @@ from model.individual import Individual as Ind
 from model.grid import Grid
 import numpy as np
 import random as rd
+import matplotlib.pyplot as plt
 
 class Population(object):
 
-	def __init__(self, par="parameters.txt"):
+	def __init__(self, par="parameters.txt", v=0.5, dev='off'):
 		attrs = fman.extractColumnFromFile(par, 0)
 		vals = fman.extractColumnFromFile(par, 1)
 		for attr,val in zip(attrs, vals):
 			setattr(self, attr, val)
+		#initial vigilance level can be given by user
+		self.v = v
+		self.dev = dev
 
 	def create(self, n=None):
 		if n == None:
@@ -20,7 +24,7 @@ class Population(object):
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
 		for i in range(n):
-			self.individuals.append(Ind(m=self.gridSize))
+			self.individuals.append(Ind(m=self.gridSize, v=self.v))
 
 	def explore(self):
 		self.ncell = np.zeros([self.gridSize, self.gridSize])
@@ -116,12 +120,16 @@ class Population(object):
 
 
 	def launch(self):
+
 		with open("vigilance_out.txt", "w") as f:
+
 			for gen in range(self.nGen):
 				self.lifeCycle()
 				f.write('{0}\n'.format(round(self.vigilance, 3)))
+
 				if self.deathCount == self.nIndiv:
 					break
 				else:
 					self.deathCount = 0
+
 					
