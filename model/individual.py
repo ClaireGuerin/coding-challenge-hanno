@@ -46,3 +46,6 @@ class Individual(object):
 		# share = SUM(1-v_i)/(gamma*n)
 		# where gamma is the competition parameter
 		self.storage += efficiency * resources * share
+
+	def reproduce(self):
+		pass
