@@ -48,4 +48,4 @@ class Individual(object):
 		self.storage += efficiency * resources * share
 
 	def reproduce(self):
-		pass
+		self.fertility = -1
