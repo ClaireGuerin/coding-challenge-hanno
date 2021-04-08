@@ -34,7 +34,7 @@ class TestPopulationObject(object):
 		assert callable(getattr(Pop(), "lifeCycle"))
 
 	def test_life_cycle_returns_offspring_pool(self):
-		self.pop = Pop()
+		self.pop = Pop(par="test/test/parameters.txt")
 		self.pop.create(n=10)
 		self.pop.lifeCycle()
 
@@ -45,11 +45,32 @@ class TestPopulationObject(object):
 			assert type(elem) is int
 			assert elem in range(10)
 
+	def test_pool_gives_individuals_storage(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create(n=10)
+
+		for i in self.pop.individuals:
+			i.vigilance = 0
+
+		self.pop.lifeCycle()
+
+		for i in self.pop.individuals:
+			assert i.storage > 0
+
 	def test_pool_corresponds_to_number_of_offspring_per_individual(self):
-		assert False, "write this test"
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create(n=10)
+		self.pop.lifeCycle()
+
+		for ind in range(10):
+			indiv = self.pop.individuals[ind]
+			assert indiv.offspring == self.pop.pool.count(ind), "wrong offspring number"
 
 	def test_pool_is_wiped_out_at_beginning_of_cycle(self):
 		assert False, "write this test"
 
 	def test_life_cycle_returns_output_info(self):
+		assert False, "write this test"
+
+	def test_individuals_placed_on_grid_at_beginning_of_simulation(self):
 		assert False, "write this test"

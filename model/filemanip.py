@@ -14,6 +14,16 @@ def searchFile(fileToRead, string):
 		else:
 			assert False, "{0} not provided in {1}".format(string, fileToRead)		
 	
-def extractColumnFromFile(fileToRead, col, datatype):
+def extractColumnFromFile(fileToRead, col):
 	with open(fileToRead) as f:
-		return [datatype(line.split(',')[col]) for line in f.readlines()]
+		dataList = []
+		for line in f.readlines():
+			dat = line.rstrip().split(',')[col]
+			if dat.isalpha():
+				dataList.append(str(dat))
+			elif dat.isdigit():
+				dataList.append(int(dat))
+			else:
+				dataList.append(float(dat))
+
+		return dataList
