@@ -10,17 +10,32 @@ class Population(object):
 		for attr,val in zip(attrs, vals):
 			setattr(self, attr, val)
 
-	def create(self, n):
-		self.individuals = [Ind()]*n
-		self.grid = Grid(dim=self.gridSize)
+	def create(self, n=None):
+		if n == None:
+			n = self.nIndiv
+
+		self.individuals = [Ind(m=self.gridSize)]*n
+		self.grid = Grid(dim=self.gridSize, init=self.initRes)
+
+	def explore(self):
+		pass
 
 	def lifeCycle(self):	
 		self.pool = []
+		totalVigilance = 0
 
-		for ind in self.individuals:
+		for indiv in range(self.nIndiv):
+			totalVigilance += 1
+
+			ind = self.individuals[indiv]
 			res = self.grid.resources[ind.coordinates[0], ind.coordinates[1]]
-			ind.gather(resources=float(res), share=None, efficiency=self.efficiency)
+			share = self.grid.share[ind.coordinates[0], ind.coordinates[1]]
+			ind.gather(resources=float(res), share=share, efficiency=self.efficiency)
 			ind.reproduce(fecundity=self.fecundity)
+			self.pool.extend([indiv] * ind.offspring)
+
+
+		self.vigilance = totalVigilance
 
 
 	def launch(self):

@@ -5,14 +5,14 @@ from model.grid import Grid
 class TestPopulationObject(object):
 
 	def test_population_has_individual_instances(self):
-		self.pop = Pop()
+		self.pop = Pop("test/test/parameters.txt")
 
 		assert hasattr(self.pop, "create"), "cannot create pop"
 		self.pop.create(2)
 		assert hasattr(self.pop, "individuals"), "no indivs in this pop"
 
 	def test_population_has_correct_density(self):
-		self.pop = Pop()
+		self.pop = Pop("test/test/parameters.txt")
 
 		d1 = 2
 		self.pop.create(d1)
@@ -67,11 +67,21 @@ class TestPopulationObject(object):
 			indiv = self.pop.individuals[ind]
 			assert indiv.offspring == self.pop.pool.count(ind), "wrong offspring number"
 
+	def test_share_calculated_and_assigned_to_grid(self):
+		assert False, "write this test"
+
 	def test_pool_is_wiped_out_at_beginning_of_cycle(self):
 		assert False, "write this test"
 
 	def test_life_cycle_returns_output_info(self):
-		assert False, "write this test"
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create(n=10)
+		self.pop.lifeCycle()
+
+		assert hasattr(self.pop, "vigilance")
+		assert self.pop.vigilance is not None
+		assert type(self.pop.vigilance) is float
+		assert 0 <= self.pop.vigilance <= 1
 
 	def test_individuals_placed_on_grid_at_beginning_of_simulation(self):
 		assert False, "write this test"
@@ -83,3 +93,10 @@ class TestPopulationObject(object):
 		assert hasattr(self.pop, "grid")
 		assert type(self.pop.grid) is Grid
 		assert self.pop.grid.resources.shape == (self.pop.gridSize, self.pop.gridSize)
+
+	def test_population_explores_grid(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+
+		assert hasattr(self.pop, "explore")
+	

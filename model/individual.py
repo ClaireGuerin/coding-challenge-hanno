@@ -4,14 +4,11 @@ from operator import add
 
 class Individual(object):
 
-	def __init__(self):
+	def __init__(self,m):
 		self.vigilance = float(0.5)
-		self.coordinates = [-1,-1]
+		self.coordinates = [random.randint(0, m-1), random.randint(1, m-1)]
 		self.mutant = None
 		self.storage = 0
-
-	def placeOnGrid(self, m):
-		self.coordinates = [random.randint(0, m-1), random.randint(1, m-1)]
 
 	def mutate(self, mutRate, mutStep, bounded=True):
 		self.mutant = bool(rd.binomial(1, mutRate))

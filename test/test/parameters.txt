@@ -1,5 +1,6 @@
 gridSize,3
 nIndiv,10
 nGen,10
-efficiency,0.9
+initRes,0.5
+efficiency,0.8
 fecundity,2
