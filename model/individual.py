@@ -48,5 +48,6 @@ class Individual(object):
 		self.storage += efficiency * resources * share
 
 	def reproduce(self, fecundity):
-		self.fertility = float(fecundity * self.storage)
-		self.offspring = int(self.fertility)
+		residualFecundity = 0.0001
+		self.fertility = float(residualFecundity + fecundity * self.storage)
+		self.offspring = rd.poisson(max(0,self.fertility))

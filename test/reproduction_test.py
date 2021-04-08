@@ -61,7 +61,7 @@ class TestReproductionFunction(object):
 		offspring = []
 
 		for ind in self.fakepop.individuals:
-			setattr(ind, "fertility", 4)
+			setattr(ind, "storage", 4)
 			pseudorandom(0)
 			ind.reproduce(fecundity=2)
 			offspring.append(ind.offspring)
@@ -76,11 +76,11 @@ class TestReproductionFunction(object):
 		self.nIndividuals = 1000
 		self.fakepop = Pop()
 		self.fakepop.create(self.nIndividuals)
-		self.explambda = 4
+		self.explambda = 8
 		
 		offspringPerInd = []
 		for ind in self.fakepop.individuals:
-			setattr(ind, "fertility", self.explambda)
+			setattr(ind, "storage", 4)
 			ind.reproduce(fecundity=2)
 			offspringPerInd.append(ind.offspring)
 		
