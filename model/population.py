@@ -89,16 +89,17 @@ class Population(object):
 
 	def update(self):
 
-		tmpIndividuals = [Ind(m=self.gridSize)] * self.nIndiv
+		tmpIndividuals = []
 		self.totalVigilance = 0
 		
 		for offspring in range(self.nIndiv):
-			ind = tmpIndividuals[offspring]
+			ind = Ind(m=self.gridSize)
 			parent = self.individuals[self.nextGeneration[offspring]]
 			setattr(ind, "vigilance", parent.vigilance)
 			setattr(ind, "coordinates", parent.coordinates)
 
 			ind.mutate(mutRate=self.mutRate, mutStep=self.mutStep)
+			tmpIndividuals.append(ind)
 
 			self.totalVigilance += ind.vigilance
 

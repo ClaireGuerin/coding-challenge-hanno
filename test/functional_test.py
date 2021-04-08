@@ -36,8 +36,13 @@ class TestSimpleRun(object):
 
 	def test_simulation_runs_for_exact_generations(self):
 		self.population = Pop(par="test/test/parameters.txt")
+		self.predation = 0
 		self.population.create()
 		self.population.launch()
+
+		assert self.population.deathCount != self.population.nIndiv
+		for ind in self.population.individuals:
+			assert ind.alive
 
 		with open("vigilance_out.txt", "r") as fOut:
 			lineCount = len(fOut.readlines())
