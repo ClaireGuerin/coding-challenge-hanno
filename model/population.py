@@ -13,7 +13,7 @@ class Population(object):
 		self.individuals = [Ind()]*n
 
 	def lifeCycle(self):
-		pass
+		self.pool = []
 
 
 	def launch(self):
