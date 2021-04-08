@@ -47,5 +47,6 @@ class Individual(object):
 		# where gamma is the competition parameter
 		self.storage += efficiency * resources * share
 
-	def reproduce(self):
-		self.fertility = -1
+	def reproduce(self, fecundity):
+		self.fertility = float(fecundity * self.storage)
+		self.offspring = int(1)

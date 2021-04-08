@@ -1,6 +1,9 @@
 import pytest
 from model.individual import Individual as Ind
 from model.population import Population as Pop
+from collections import Counter
+import math as m
+import scipy.stats as scistats
 
 class TestReproductionFunction(object):
 
@@ -14,14 +17,27 @@ class TestReproductionFunction(object):
 		for ind in range(len(self.fakepop.individuals)):
 			indiv = self.fakepop.individuals[ind]
 			setattr(indiv, "storage", 1 + 9 * ind) 
-			indiv.reproduce()
+			indiv.reproduce(fecundity=2)
 			assert type(indiv.fertility) is float
 			assert indiv.fertility >= 0
+
+	def test_fertility_increases_with_storage(self):
+		self.fakepop = Pop()
+		self.fakepop.create(10)
+
+		fertility = 0
+		
+		for ind in range(len(self.fakepop.individuals)):
+			indiv = self.fakepop.individuals[ind]
+			setattr(indiv, "storage", 1 + 9 * ind) 
+			indiv.reproduce(fecundity=2)
+			assert indiv.fertility > fertility
+			fertility = indiv.fertility
 
 	def test_reproduction_gives_offspring_number(self):
 		self.indiv = Ind()
 		
-		self.indiv.reproduce()
+		self.indiv.reproduce(fecundity=2)
 		assert self.indiv.offspring != None, "No offspring number generated"
 		assert type(self.indiv.offspring) is int, "Offspring number of wrong format: {0} instead of integer".format(type(self.indiv.offspring))
 		assert self.indiv.offspring >= 0, "Offspring number cannot be negative"
@@ -36,7 +52,7 @@ class TestReproductionFunction(object):
 		for ind in self.fakepop.individuals:
 			setattr(ind, "fertility", 4)
 			pseudorandom(0)
-			ind.reproduce()
+			ind.reproduce(fecundity=2)
 			offspring.append(ind.offspring)
 
 		assert all([x == offspring[0] for x in offspring]), "number of offspring differs with same seed, {0}".format(set(offspring))
@@ -54,7 +70,7 @@ class TestReproductionFunction(object):
 		offspringPerInd = []
 		for ind in self.fakepop.individuals:
 			setattr(ind, "fertility", self.explambda)
-			ind.reproduce()
+			ind.reproduce(fecundity=2)
 			offspringPerInd.append(ind.offspring)
 		
 		d = Counter(offspringPerInd)
