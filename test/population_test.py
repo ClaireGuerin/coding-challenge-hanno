@@ -1,6 +1,7 @@
 from model.population import Population as Pop
 from model.individual import Individual as Ind
 from model.grid import Grid
+import numpy as np
 
 class TestPopulationObject(object):
 
@@ -48,7 +49,7 @@ class TestPopulationObject(object):
 
 	def test_pool_gives_individuals_storage(self):
 		self.pop = Pop(par="test/test/parameters.txt")
-		self.pop.create(n=10)
+		self.pop.create()
 
 		for i in self.pop.individuals:
 			i.vigilance = 0
@@ -99,4 +100,39 @@ class TestPopulationObject(object):
 		self.pop.create()
 
 		assert hasattr(self.pop, "explore")
-	
+
+	def test_population_exploration_leads_to_change_in_coord(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create(n=1000)
+
+		coordH = []
+		coordV = []
+
+		for ind in self.pop.individuals:
+			coordH.append(ind.coordinates[0])
+			coordV.append(ind.coordinates[1])
+
+		self.pop.explore()
+
+		coordH2 = []
+		coordV2 = []
+
+		for ind in self.pop.individuals:
+			coordH2.append(ind.coordinates[0])
+			coordV2.append(ind.coordinates[1])
+
+		assert any([x != y for x in coordH for y in coordH2])
+		assert any([x != y for x in coordV for y in coordV2])
+
+	def test_population_exploration_gives_share_info(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		self.pop.explore()
+		m = self.pop.gridSize
+
+		assert hasattr(self.pop, "ncell")
+		assert type(self.pop.ncell) is np.ndarray
+		assert self.pop.ncell.shape == (m,m)
+		assert hasattr(self.pop, "vcell")
+		assert type(self.pop.vcell) is np.ndarray
+		assert self.pop.vcell.shape == (m,m)

@@ -1,6 +1,7 @@
 import model.filemanip as fman
 from model.individual import Individual as Ind
 from model.grid import Grid
+import numpy as np
 
 class Population(object):
 
@@ -18,7 +19,14 @@ class Population(object):
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 
 	def explore(self):
-		pass
+		self.ncell = np.zeros([self.gridSize, self.gridSize])
+		self.vcell = np.zeros([self.gridSize, self.gridSize])
+
+		for ind in self.individuals:
+			ind.explore()
+			self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
+			self.vcell[ind.coordinates[0], ind.coordinates[1]] += (1 - ind.vigilance)
+
 
 	def lifeCycle(self):	
 		self.pool = []
