@@ -1,3 +1,4 @@
+import pytest
 from model.population import Population as Pop
 from model.individual import Individual as Ind
 from model.grid import Grid
@@ -42,16 +43,6 @@ class TestPopulationObject(object):
 	# def test_pool_is_wiped_out_at_beginning_of_cycle(self):
 	# 	assert False, "write this test"
 
-	def test_life_cycle_returns_output_info(self):
-		self.pop = Pop(par="test/test/parameters.txt")
-		self.pop.create(n=10)
-		self.pop.lifeCycle()
-
-		assert hasattr(self.pop, "vigilance")
-		assert self.pop.vigilance is not None
-		assert type(self.pop.vigilance) is float
-		assert 0 <= self.pop.vigilance <= 1
-
 	def test_population_creates_grid(self):
 		self.pop = Pop("test/test/parameters.txt")
 		self.pop.create(n=20)
@@ -68,26 +59,21 @@ class TestPopulationObject(object):
 
 	def test_population_exploration_leads_to_change_in_coord(self):
 		self.pop = Pop("test/test/parameters.txt")
-		self.pop.create(n=10)
+		self.pop.nIndiv = 1000
+		self.pop.gridSize = 60
+		self.pop.create()
 
-		coordH = []
-		coordV = []
-
+		coord = []
 		for ind in self.pop.individuals:
-			coordH.append(ind.coordinates[0])
-			coordV.append(ind.coordinates[1])
+			coord.append(ind.coordinates)
 
 		self.pop.explore()
 
-		coordH2 = []
-		coordV2 = []
-
+		newCoord = []
 		for ind in self.pop.individuals:
-			coordH2.append(ind.coordinates[0])
-			coordV2.append(ind.coordinates[1])
+			newCoord.append(ind.coordinates)
 
-		assert any([x != y for x in coordH for y in coordH2])
-		assert any([x != y for x in coordV for y in coordV2])
+		assert all([coord[x] == newCoord[x] for x in range(len(coord))]) == False
 
 	def test_population_exploration_gives_share_info(self):
 		self.pop = Pop("test/test/parameters.txt")
@@ -109,7 +95,7 @@ class TestPopulationObject(object):
 		coordV = []
 
 		for ind in self.pop.individuals:
-			ind.vigilance = 0
+			ind.alive = False
 			coordH.append(ind.coordinates[0])
 			coordV.append(ind.coordinates[1])
 
@@ -140,6 +126,7 @@ class TestPopulationObject(object):
 	def test_gathering_gives_individuals_storage(self):
 		self.pop = Pop(par="test/test/parameters.txt")
 		self.pop.create()
+		self.pop.grid.share = np.full([self.pop.gridSize, self.pop.gridSize], 0.8)
 
 		for i in self.pop.individuals:
 			i.vigilance = 0
@@ -161,9 +148,9 @@ class TestPopulationObject(object):
 
 		self.pop.routine()
 
-		compareGrids = self.pop.grid.share != shareG
+		compareGrids = self.pop.grid.share == shareG
 
-		assert compareGrids.all()
+		assert compareGrids.all() == False
 
 	def test_population_routine_changes_resources_grid(self):
 		self.pop = Pop("test/test/parameters.txt")
@@ -190,10 +177,10 @@ class TestPopulationObject(object):
 		self.pop.reproduce()
 
 		assert hasattr(self.pop, "nextGeneration"), "population pool does not exist"
-		assert type(self.pop.pool) is list
-		assert len(self.pop.pool) > 0
+		assert type(self.pop.nextGeneration) is list
+		assert len(self.pop.nextGeneration) > 0
 
-		for elem in self.pop.pool:
+		for elem in self.pop.nextGeneration:
 			assert type(elem) is int
 			assert elem in range(10)
 
@@ -229,5 +216,31 @@ class TestPopulationObject(object):
 
 		assert len(self.pop.individuals) == self.pop.nIndiv
 		assert self.pop.individuals != oldgen
+
+	def test_update_returns_population_vigilance_info(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		self.pop.routine()
+		self.pop.reproduce()
+		self.pop.update()
+
+		assert hasattr(self.pop, "vigilance")
+		assert self.pop.vigilance is not None
+		assert type(self.pop.vigilance) is float
+		assert 0 <= self.pop.vigilance <= 1
+
+	def test_population_vigilance_is_correct(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		self.pop.routine()
+		self.pop.reproduce()
+		self.pop.update()
+
+		collectVigilances = []
+
+		for ind in self.pop.individuals:
+			collectVigilances.append(ind.vigilance)
+
+		assert self.pop.vigilance == pytest.approx(np.mean(collectVigilances), 0.1)
 
 

@@ -10,6 +10,7 @@ class Individual(object):
 		self.coordinates = [random.randint(0, self.m-1), random.randint(1, self.m-1)]
 		self.mutant = None
 		self.storage = 0
+		self.alive = True
 
 	def mutate(self, mutRate, mutStep, bounded=True):
 		self.mutant = bool(rd.binomial(1, mutRate))

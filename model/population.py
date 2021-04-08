@@ -24,9 +24,12 @@ class Population(object):
 		self.vcell = np.zeros([self.gridSize, self.gridSize])
 
 		for ind in self.individuals:
-			ind.explore()
-			self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
-			self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
+			if ind.alive == False:
+				continue
+			else:
+				ind.explore()
+				self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
+				self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
 
 	def gatherAndSurvive(self):
 
@@ -90,15 +93,15 @@ class Population(object):
 			self.totalVigilance += ind.vigilance
 
 		self.individuals = tmpIndividuals
+		self.vigilance = self.totalVigilance / self.nIndiv
 
 	def lifeCycle(self):	
-		
-		totalVigilance = 0
 
-		for indiv in range(self.nIndiv):
-			totalVigilance += 1
+		for steps in self.routineSteps:
+			self.routine()
 
-		self.vigilance = totalVigilance
+		self.reproduce()
+		self.update()
 
 
 	def launch(self):

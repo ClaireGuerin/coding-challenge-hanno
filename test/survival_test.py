@@ -6,18 +6,18 @@ import random
 class TestSurvivalFeature(object):
 
 	def test_individuals_have_survival_function(self):
-		assert hasattr(Ind(), "survive"), "individuals cannot survive"
-		assert callable(getattr(Ind(), "survive"))
+		assert hasattr(Ind(m=3), "survive"), "individuals cannot survive"
+		assert callable(getattr(Ind(m=3), "survive"))
 
 	def test_individuals_can_die(self):
-		self.ind = Ind()
+		self.ind = Ind(m=3)
 		self.ind.survive(p=0.5)
 		assert hasattr(self.ind, "alive")
 		assert self.ind.alive is not None
 		assert type(self.ind.alive) is bool
 
 	def test_death_depends_on_predation_risk(self):
-		self.ind = Ind()
+		self.ind = Ind(m=3)
 		self.ind.vigilance = 0
 		self.ind.survive(p=0)
 		assert self.ind.alive == True
@@ -26,7 +26,7 @@ class TestSurvivalFeature(object):
 		assert self.ind.alive == False
 
 	def test_death_depends_on_vigilance(self):
-		self.ind = Ind()
+		self.ind = Ind(m=3)
 		self.ind.vigilance = 0
 		self.ind.survive(p=1)
 		assert self.ind.alive == False
@@ -36,7 +36,7 @@ class TestSurvivalFeature(object):
 		assert self.ind.alive == True
 
 	def test_average_survival_for_intermediate_vigilance(self):
-		self.ind = Ind()
+		self.ind = Ind(m=3)
 		self.ind.vigilance = random.random()
 		
 		deathCount = 0
