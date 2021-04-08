@@ -33,8 +33,8 @@ class TestIndividualObject(object):
 		self.ind.placeOnGrid(m=3)
 
 		assert self.ind.coordinates != [-1,-1]
-		assert self.ind.coordinates[0] > 0
-		assert self.ind.coordinates[1] > 0
+		assert self.ind.coordinates[0] >= 0
+		assert self.ind.coordinates[1] >= 0
 
 	def test_initial_coordinates_fit_on_grid(self):
 		self.ind = Ind()
@@ -43,15 +43,15 @@ class TestIndividualObject(object):
 		size = 3
 		self.ind.placeOnGrid(m=size)
 
-		assert self.ind.coordinates[0] <= size
-		assert self.ind.coordinates[1] <= size
+		assert self.ind.coordinates[0] < size
+		assert self.ind.coordinates[1] < size
 
 		# 10*10 grid
 		size = 10
 		self.ind.placeOnGrid(m=size)
 
-		assert self.ind.coordinates[0] <= size
-		assert self.ind.coordinates[1] <= size
+		assert self.ind.coordinates[0] < size
+		assert self.ind.coordinates[1] < size
 
 	# def test_initial_coordinates_uniform(self):
 	# 	hcoord = [-1]*100

@@ -47,7 +47,7 @@ class TestExplorationFunction(object):
 		self.ind = Ind()
 		gridSide = 6
 
-		self.ind.coordinates = [1,1]
+		self.ind.coordinates = [0,0]
 
 		storeCoordH = []
 		storeCoordV = []
@@ -57,12 +57,12 @@ class TestExplorationFunction(object):
 			storeCoordH.append(self.ind.coordinates[0])
 			storeCoordV.append(self.ind.coordinates[1])
 
-		assert all([1 <= x <= gridSide for x in storeCoordH]), "stepped out of grid: {0}".format(storeCoordH)
-		assert all([1 <= x <= gridSide for x in storeCoordV]), "stepped out of grid: {0}".format(storeCoordV)
+		assert all([0 <= x < gridSide for x in storeCoordH]), "stepped out of grid: {0}".format(storeCoordH)
+		assert all([0 <= x < gridSide for x in storeCoordV]), "stepped out of grid: {0}".format(storeCoordV)
 
 		# reset for upper boundary
 
-		self.ind.coordinates = [gridSide,gridSide]
+		self.ind.coordinates = [gridSide - 1, gridSide - 1]
 
 		storeCoordH = []
 		storeCoordV = []
@@ -72,5 +72,5 @@ class TestExplorationFunction(object):
 			storeCoordH.append(self.ind.coordinates[0])
 			storeCoordV.append(self.ind.coordinates[1])
 
-		assert all([1 <= x <= gridSide for x in storeCoordH]), "stepped out of grid: {0}".format(storeCoordH)
-		assert all([1 <= x <= gridSide for x in storeCoordV]), "stepped out of grid: {0}".format(storeCoordV)
+		assert all([1 <= x < gridSide for x in storeCoordH]), "stepped out of grid: {0}".format(storeCoordH)
+		assert all([1 <= x < gridSide for x in storeCoordV]), "stepped out of grid: {0}".format(storeCoordV)

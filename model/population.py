@@ -1,5 +1,6 @@
 import model.filemanip as fman
 from model.individual import Individual as Ind
+from model.grid import Grid
 
 class Population(object):
 
@@ -11,12 +12,14 @@ class Population(object):
 
 	def create(self, n):
 		self.individuals = [Ind()]*n
+		self.grid = Grid(dim=self.gridSize)
 
 	def lifeCycle(self):	
 		self.pool = []
 
 		for ind in self.individuals:
-			ind.gather(resources=None, share=None, efficiency=self.efficiency)
+			res = self.grid.resources[ind.coordinates[0], ind.coordinates[1]]
+			ind.gather(resources=float(res), share=None, efficiency=self.efficiency)
 			ind.reproduce(fecundity=self.fecundity)
 
 

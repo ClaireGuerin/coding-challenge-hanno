@@ -1,5 +1,6 @@
 from model.population import Population as Pop
 from model.individual import Individual as Ind
+from model.grid import Grid
 
 class TestPopulationObject(object):
 
@@ -74,3 +75,11 @@ class TestPopulationObject(object):
 
 	def test_individuals_placed_on_grid_at_beginning_of_simulation(self):
 		assert False, "write this test"
+
+	def test_population_creates_grid(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create(n=20)
+
+		assert hasattr(self.pop, "grid")
+		assert type(self.pop.grid) is Grid
+		assert self.pop.grid.resources.shape == (self.pop.gridSize, self.pop.gridSize)

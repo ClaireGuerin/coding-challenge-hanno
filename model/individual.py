@@ -11,7 +11,7 @@ class Individual(object):
 		self.storage = 0
 
 	def placeOnGrid(self, m):
-		self.coordinates = [random.randint(1, m), random.randint(1, m)]
+		self.coordinates = [random.randint(0, m-1), random.randint(1, m-1)]
 
 	def mutate(self, mutRate, mutStep, bounded=True):
 		self.mutant = bool(rd.binomial(1, mutRate))
@@ -36,7 +36,7 @@ class Individual(object):
 	def explore(self, m):
 		steps = [random.randint(-1, 1), random.randint(-1, 1)]
 		unboundedCoordinates = list(map(add, self.coordinates, steps))
-		self.coordinates = list(map(lambda x: min(max(x,1),m), unboundedCoordinates))
+		self.coordinates = list(map(lambda x: min(max(x,0),m-1), unboundedCoordinates))
 
 	def survive(self, p):
 		predationRisk = p * (1 - self.vigilance)
