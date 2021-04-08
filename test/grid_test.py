@@ -42,6 +42,3 @@ class TestGridObject(object):
 
 		for cell in np.nditer(self.grid.resources):
 			assert pytest.approx(cell) == 2
-
-	def test_grid_grows_resources_back(self):
-		assert False, "write this test"

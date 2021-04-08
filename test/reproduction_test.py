@@ -8,11 +8,11 @@ import scipy.stats as scistats
 class TestReproductionFunction(object):
 
 	def test_individual_can_reproduce(self):
-		assert hasattr(Ind(), "reproduce"), "ind cannot reproduce"
+		assert hasattr(Ind(m=3), "reproduce"), "ind cannot reproduce"
 
 	def test_fertility_returns_positive_float(self):
-		self.fakepop = Pop()
-		self.fakepop.create(10)
+		self.fakepop = Pop("test/test/parameters.txt")
+		self.fakepop.create()
 		
 		for ind in range(len(self.fakepop.individuals)):
 			indiv = self.fakepop.individuals[ind]
@@ -22,8 +22,8 @@ class TestReproductionFunction(object):
 			assert indiv.fertility >= 0
 
 	def test_fertility_increases_with_storage(self):
-		self.fakepop = Pop()
-		self.fakepop.create(10)
+		self.fakepop = Pop("test/test/parameters.txt")
+		self.fakepop.create()
 
 		fertility = 0
 		
@@ -35,7 +35,7 @@ class TestReproductionFunction(object):
 			fertility = indiv.fertility
 
 	def test_reproduction_gives_offspring_number(self):
-		self.indiv = Ind()
+		self.indiv = Ind(m=3)
 		
 		self.indiv.reproduce(fecundity=2)
 		assert self.indiv.offspring != None, "No offspring number generated"
@@ -43,8 +43,8 @@ class TestReproductionFunction(object):
 		assert self.indiv.offspring >= 0, "Offspring number cannot be negative"
 
 	def test_offspring_number_increases_with_fertility(self):
-		self.indLowFertility = Ind()
-		self.indHighFertility = Ind()
+		self.indLowFertility = Ind(m=3)
+		self.indHighFertility = Ind(m=3)
 
 		self.indLowFertility.storage = 1
 		self.indLowFertility.reproduce(fecundity=0.5)
@@ -54,9 +54,9 @@ class TestReproductionFunction(object):
 		assert self.indLowFertility.offspring < self.indHighFertility.offspring, "high fertility should lead to higher offspring number"
 
 	def test_reproduction_is_seed_dependent(self, pseudorandom):
-		self.nIndividuals = 1000
-		self.fakepop = Pop()
-		self.fakepop.create(self.nIndividuals)
+		self.fakepop = Pop("test/test/parameters.txt")
+		self.fakepop.nIndiv = 1000
+		self.fakepop.create()
 
 		offspring = []
 
@@ -73,9 +73,9 @@ class TestReproductionFunction(object):
 		#http://www2.stat-athens.aueb.gr/~exek/papers/Xekalaki-Statistician2000(355-382)ft.pdf
 		pseudorandom(0)
 		
-		self.nIndividuals = 1000
-		self.fakepop = Pop()
-		self.fakepop.create(self.nIndividuals)
+		self.fakepop = Pop("test/test/parameters.txt")
+		self.fakepop.nIndiv = 1000
+		self.fakepop.create()
 		self.explambda = 8
 		
 		offspringPerInd = []
@@ -97,7 +97,7 @@ class TestReproductionFunction(object):
 				observedCount.append(0)
 			
 			expProbability = m.pow(m.e, (-self.explambda)) * (m.pow(self.explambda, k)) / m.factorial(k)
-			expectedCount.append(self.nIndividuals * expProbability)
+			expectedCount.append(self.fakepop.nIndiv * expProbability)
 						
 		chisq, pval = scistats.chisquare(observedCount, expectedCount)
 		assert len(expectedCount) == len(observedCount), "len obs = {0}, len exp = {1}".format(len(observedCount), len(expectedCount))

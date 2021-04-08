@@ -9,7 +9,7 @@ import gc
 class TestMutationFunction(object):
 			
 	def test_mutation_function_takes_and_returns_phenotype(self):
-		self.pop = Pop()
+		self.pop = Pop("test/test/parameters.txt")
 		self.pop.create(n=1)
 		self.indiv = self.pop.individuals[0]
 		
@@ -21,7 +21,7 @@ class TestMutationFunction(object):
 		gc.collect()
 			
 	def test_mutants_are_defined(self):
-		self.pop = Pop()
+		self.pop = Pop("test/test/parameters.txt")
 		self.pop.create(n=1)
 		self.indiv = self.pop.individuals[0]
 		
@@ -33,7 +33,7 @@ class TestMutationFunction(object):
 
 	def test_mutants_depend_on_seed(self, pseudorandom):
 		self.nIndividuals = 1000
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=self.nIndividuals)
 
 		mutants = []
@@ -48,7 +48,7 @@ class TestMutationFunction(object):
 	def test_mutants_are_drawn_from_binomial(self, pseudorandom):
 		pseudorandom(0)
 		self.nIndividuals = 1000
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=self.nIndividuals)
 		self.mutationRate = 0.2
 		
@@ -67,7 +67,7 @@ class TestMutationFunction(object):
 
 	def test_deviation_depends_on_seed(self, pseudorandom):
 		self.nIndividuals = 1000
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=self.nIndividuals)
 
 		mutationDeviations = []
@@ -80,7 +80,7 @@ class TestMutationFunction(object):
 		assert all([x == mutationDeviations[0] for x in mutationDeviations]), "Mutation deviation does not depend on seed: {0}".format(set(mutationDeviations))
 		
 	def test_deviation_function_returns_float(self):
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=1)
 		self.indiv = self.fakepop.individuals[0]
 		self.v = self.indiv.vigilance
@@ -93,7 +93,7 @@ class TestMutationFunction(object):
 		gc.collect()
 		
 	def test_mutants_get_deviation_from_phenotype(self):
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=1)
 		self.indiv = self.fakepop.individuals[0]
 		self.indiv.mutate(mutRate=1,mutStep=0.05)
@@ -104,7 +104,7 @@ class TestMutationFunction(object):
 		gc.collect()
 			
 	def test_only_mutants_change_phenotype(self):
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=2)
 		self.mutantIndivTrue = self.fakepop.individuals[0]
 		self.mutantIndivFalse = self.fakepop.individuals[1]
@@ -122,7 +122,7 @@ class TestMutationFunction(object):
 	def test_mutation_deviation_follows_normal_distribution(self, pseudorandom):
 		pseudorandom(0)
 		self.nIndividuals = 1000
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(self.nIndividuals)
 		
 		self.distri = []
@@ -140,7 +140,7 @@ class TestMutationFunction(object):
 		gc.collect()
  
 	def test_mutation_adds_deviation_to_phenotype(self):
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(2)
 		
 		# WHEN THERE IS MUTATION
@@ -187,7 +187,7 @@ class TestMutationFunction(object):
 		gc.collect()
 		
 	def test_mutation_does_not_affect_phenotype_type(self):
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=1)
 		self.indiv = self.fakepop.individuals[0]
 		self.phen = self.indiv.vigilance
@@ -198,9 +198,10 @@ class TestMutationFunction(object):
 		gc.collect()
 
 	def test_individual_mutation_can_be_unbounded(self):
-		self.fakepop = Pop()
+		self.fakepop = Pop("test/test/parameters.txt")
+		self.fakepop.nIndiv = 100
 		self.fakepop.initialVigilance = 1
-		self.fakepop.create(100)
+		self.fakepop.create()
 
 		collectPhenotypes = []
 
