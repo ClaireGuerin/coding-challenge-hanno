@@ -49,4 +49,4 @@ class Individual(object):
 
 	def reproduce(self, fecundity):
 		self.fertility = float(fecundity * self.storage)
-		self.offspring = int(1)
+		self.offspring = int(self.fertility)

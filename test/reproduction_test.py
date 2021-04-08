@@ -42,6 +42,17 @@ class TestReproductionFunction(object):
 		assert type(self.indiv.offspring) is int, "Offspring number of wrong format: {0} instead of integer".format(type(self.indiv.offspring))
 		assert self.indiv.offspring >= 0, "Offspring number cannot be negative"
 
+	def test_offspring_number_increases_with_fertility(self):
+		self.indLowFertility = Ind()
+		self.indHighFertility = Ind()
+
+		self.indLowFertility.storage = 1
+		self.indLowFertility.reproduce(fecundity=0.5)
+		self.indHighFertility.storage = 10
+		self.indHighFertility.reproduce(fecundity=2)
+
+		assert self.indLowFertility.offspring < self.indHighFertility.offspring, "high fertility should lead to higher offspring number"
+
 	def test_reproduction_is_seed_dependent(self, pseudorandom):
 		self.nIndividuals = 1000
 		self.fakepop = Pop()
