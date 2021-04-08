@@ -106,15 +106,17 @@ class TestMutationFunction(object):
 	def test_only_mutants_change_phenotype(self):
 		self.fakepop = Pop("test/test/parameters.txt")
 		self.fakepop.create(n=2)
+		assert len(self.fakepop.individuals) == 2
+
 		self.mutantIndivTrue = self.fakepop.individuals[0]
 		self.mutantIndivFalse = self.fakepop.individuals[1]
 		
 		self.mutantIndivTrue.mutate(mutRate=1, mutStep=0.05)
-		assert self.mutantIndivTrue.mutant, "Uh-oh, looks like the individual did not mutate when it should have..."
-		assert self.mutantIndivFalse.mutationDeviation != 0, "Your mutant (bool={0}) phenotype does not deviate!".format(self.mutantIndivTrue.mutant)
+		assert bool(self.mutantIndivTrue.mutant), "Uh-oh, looks like the individual did not mutate when it should have..."
+		assert self.mutantIndivTrue.mutationDeviation != 0, "Your mutant (bool={0}) phenotype does not deviate!".format(self.mutantIndivTrue.mutant)
 		
 		self.mutantIndivFalse.mutate(mutRate=0, mutStep=0.05)
-		assert not self.mutantIndivFalse.mutant
+		assert not bool(self.mutantIndivFalse.mutant)
 		assert self.mutantIndivFalse.mutationDeviation == 0, "Phenotype deviates even though individual not a mutant!"
 		
 		gc.collect()

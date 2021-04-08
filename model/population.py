@@ -16,12 +16,16 @@ class Population(object):
 		if n == None:
 			n = self.nIndiv
 
-		self.individuals = [Ind(m=self.gridSize)]*n
+		self.deathCount = 0
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
+		self.individuals = []
+		for i in range(n):
+			self.individuals.append(Ind(m=self.gridSize))
 
 	def explore(self):
 		self.ncell = np.zeros([self.gridSize, self.gridSize])
 		self.vcell = np.zeros([self.gridSize, self.gridSize])
+
 
 		for ind in self.individuals:
 			if ind.alive == False:
@@ -34,11 +38,14 @@ class Population(object):
 	def gatherAndSurvive(self):
 
 		for ind in self.individuals:
-			res = self.grid.resources[ind.coordinates[0], ind.coordinates[1]]
-			share = self.grid.share[ind.coordinates[0], ind.coordinates[1]]
+			if ind.alive == False:
+				continue
+			else:
+				res = self.grid.resources[ind.coordinates[0], ind.coordinates[1]]
+				share = self.grid.share[ind.coordinates[0], ind.coordinates[1]]
 
-			ind.gather(resources=float(res), share=share, efficiency=self.efficiency)
-			ind.survive(p = self.predation)
+				ind.gather(resources=float(res), share=share, efficiency=self.efficiency)
+				ind.survive(p = self.predation)
 
 	def routine(self):
 
@@ -67,11 +74,14 @@ class Population(object):
 		offspring = []
 
 		for ind in self.individuals:
-			#assert hasattr(ind, "offspring") == False
-
-			ind.reproduce(fecundity=self.fecundity)
-			offspring.append(ind.offspring)
-			assert offspring[-1] == ind.offspring, "wrong order in offspring number"
+			if ind.alive == False:
+				self.deathCount += 1
+				offspring.append(0)
+			else:
+				#assert hasattr(ind, "offspring") == False
+				ind.reproduce(fecundity=self.fecundity)
+				offspring.append(ind.offspring)
+				assert offspring[-1] == ind.offspring, "wrong order in offspring number"
 
 		self.nextGeneration = rd.choices(population=range(self.nIndiv),
 			weights=offspring,
@@ -97,7 +107,7 @@ class Population(object):
 
 	def lifeCycle(self):	
 
-		for steps in self.routineSteps:
+		for steps in range(self.routineSteps):
 			self.routine()
 
 		self.reproduce()
@@ -107,4 +117,10 @@ class Population(object):
 	def launch(self):
 		with open("vigilance_out.txt", "w") as f:
 			for gen in range(self.nGen):
-				f.write('I wrote something\n')
+				self.lifeCycle()
+				f.write('{0}\n'.format(round(self.vigilance, 3)))
+				if self.deathCount == self.nIndiv:
+					break
+				else:
+					self.deathCount = 0
+					

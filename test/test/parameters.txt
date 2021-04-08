@@ -1,6 +1,7 @@
 gridSize,3
 nIndiv,10
 nGen,10
+routineSteps,4
 mutRate,0.1
 mutStep,0.01
 initRes,0.5

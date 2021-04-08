@@ -4,6 +4,7 @@ from model.individual import Individual as Ind
 from model.grid import Grid
 import numpy as np
 import gc
+import os
 
 class TestPopulationObject(object):
 
@@ -32,6 +33,12 @@ class TestPopulationObject(object):
 		assert len(self.pop.individuals) == d2
 		for i in self.pop.individuals:
 			assert type(i) is Ind
+
+	def test_population_individuals_are_unlinked(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+
+		assert len(set(self.pop.individuals)) == self.pop.nIndiv
 
 	def test_population_has_life_cycle(self):
 		assert hasattr(Pop(), "lifeCycle")
@@ -91,25 +98,19 @@ class TestPopulationObject(object):
 	def test_only_live_individuals_explore(self):
 		self.pop = Pop("test/test/parameters.txt")
 		self.pop.create()
-		coordH = []
-		coordV = []
+		coord = []
 
 		for ind in self.pop.individuals:
 			ind.alive = False
-			coordH.append(ind.coordinates[0])
-			coordV.append(ind.coordinates[1])
-
+			coord.append(ind.coordinates)
 
 		self.pop.explore()
 		
-		coordH2= []
-		coordV2 = []
+		newCoord = []
 		for ind in self.pop.individuals:
-			coordH2.append(ind.coordinates[0])
-			coordV2.append(ind.coordinates[1])
+			newCoord.append(ind.coordinates)
 
-		assert all([x == y for x in coordH for y in coordH2])
-		assert all([x == y for x in coordV for y in coordV2])
+		assert all([coord[x] == newCoord[x] for x in range(len(coord))])
 
 
 	def test_population_can_gather_vs_survive(self):
@@ -135,6 +136,20 @@ class TestPopulationObject(object):
 
 		for i in self.pop.individuals:
 			assert i.storage > 0
+
+	def test_only_live_individuals_gather_and_survive(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		self.pop.explore()
+
+		for ind in self.pop.individuals:
+			ind.alive = False
+
+		self.pop.gatherAndSurvive()
+		
+		for ind in self.pop.individuals:
+			assert ind.alive == False
+			assert ind.storage == 0
 
 	def test_population_has_a_routine(self):
 		assert hasattr(Pop(), "routine")
@@ -185,6 +200,72 @@ class TestPopulationObject(object):
 			assert elem in range(10)
 
 		gc.collect()
+
+	def test_pool_is_a_mix_of_individuals(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.initRes = 10
+		self.pop.create()
+		self.pop.routine()
+
+		for ind in self.pop.individuals:
+			ind.alive = True
+
+		self.pop.reproduce()
+		assert len(set(self.pop.nextGeneration)) > 1, "ids missing in {0}".format(set(self.pop.nextGeneration))
+
+		gc.collect()
+
+	def test_only_live_individuals_reproduce(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.initRes = 10
+		self.pop.create()
+		self.pop.routine()
+
+		for ind in self.pop.individuals:
+			ind.alive = False
+		self.pop.individuals[0].alive = True
+
+		self.pop.reproduce()
+		#assert len(set(self.pop.nextGeneration)) > 1, "ids missing in {0}".format(set(self.pop.nextGeneration))
+		assert len(set(self.pop.nextGeneration)) == 1, "there should be only one id in {0}".format(set(self.pop.nextGeneration))
+		assert self.pop.nextGeneration.count(0) == self.pop.nIndiv, "only ind #0 should reproduce, not {0}".format(set(self.pop.nextGeneration))
+
+		gc.collect()
+
+	def test_death_counter(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.predation = 1
+		self.pop.create()
+
+		for ind in self.pop.individuals:
+			ind.vigilance = 0
+
+		self.pop.routine()
+		for ind in self.pop.individuals:
+			assert ind.alive == False
+
+		self.pop.reproduce()
+
+		assert self.pop.deathCount == 10
+
+
+	def test_sim_stops_when_all_indivs_are_dead(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.nGen = 5
+		self.pop.predation = 1
+		self.pop.create()
+
+		for ind in self.pop.individuals:
+			ind.vigilance = 0
+
+		self.pop.launch()
+		
+		#assert self.pop.deathCount == self.pop.nIndiv, "there are {0} unexpected survivors".format(self.pop.nIndiv - self.pop.deathCount)
+		with open("vigilance_out.txt", "r") as fOut:
+			lineCount = len(fOut.readlines())
+		assert lineCount == 1
+		os.remove("vigilance_out.txt")
+
 
 	# def test_pool_is_offspring_per_individual(self):
 	# 	self.pop = Pop(par="test/test/parameters.txt")
@@ -242,5 +323,3 @@ class TestPopulationObject(object):
 			collectVigilances.append(ind.vigilance)
 
 		assert self.pop.vigilance == pytest.approx(np.mean(collectVigilances), 0.1)
-
-

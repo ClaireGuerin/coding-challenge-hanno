@@ -4,9 +4,9 @@ from operator import add
 
 class Individual(object):
 
-	def __init__(self,m):
+	def __init__(self, m, v=0.5):
 		self.m = m
-		self.vigilance = float(0.5)
+		self.vigilance = float(v)
 		self.coordinates = [random.randint(0, self.m-1), random.randint(1, self.m-1)]
 		self.mutant = None
 		self.storage = 0
