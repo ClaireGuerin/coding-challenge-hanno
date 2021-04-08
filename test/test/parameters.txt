@@ -1,6 +1,8 @@
 gridSize,3
 nIndiv,10
 nGen,10
+mutRate,0.1
+mutStep,0.01
 initRes,0.5
 efficiency,0.8
 predation,0.3

@@ -2,6 +2,7 @@ import model.filemanip as fman
 from model.individual import Individual as Ind
 from model.grid import Grid
 import numpy as np
+import random as rd
 
 class Population(object):
 
@@ -37,7 +38,7 @@ class Population(object):
 			ind.survive(p = self.predation)
 
 	def routine(self):
-		
+
 		self.explore()
 
 		# share in a cell S = SUM(1-v_i)/(gamma*n)
@@ -58,21 +59,44 @@ class Population(object):
 		resourceConsumption = 1 - self.efficiency * shares
 		self.grid.resources = resourceGrowth * resourceConsumption
 
+	def reproduce(self):
+		#parent = range(self.nIndiv)
+		offspring = []
+
+		for ind in self.individuals:
+			#assert hasattr(ind, "offspring") == False
+
+			ind.reproduce(fecundity=self.fecundity)
+			offspring.append(ind.offspring)
+			assert offspring[-1] == ind.offspring, "wrong order in offspring number"
+
+		self.nextGeneration = rd.choices(population=range(self.nIndiv),
+			weights=offspring,
+			k=self.nIndiv)
+
+	def update(self):
+
+		tmpIndividuals = [Ind(m=self.gridSize)] * self.nIndiv
+		self.totalVigilance = 0
+		
+		for offspring in range(self.nIndiv):
+			ind = tmpIndividuals[offspring]
+			parent = self.individuals[self.nextGeneration[offspring]]
+			setattr(ind, "vigilance", parent.vigilance)
+			setattr(ind, "coordinates", parent.coordinates)
+
+			ind.mutate(mutRate=self.mutRate, mutStep=self.mutStep)
+
+			self.totalVigilance += ind.vigilance
+
+		self.individuals = tmpIndividuals
 
 	def lifeCycle(self):	
-		self.pool = []
+		
 		totalVigilance = 0
 
 		for indiv in range(self.nIndiv):
 			totalVigilance += 1
-
-			ind = self.individuals[indiv]
-			res = self.grid.resources[ind.coordinates[0], ind.coordinates[1]]
-			share = self.grid.share[ind.coordinates[0], ind.coordinates[1]]
-			ind.gather(resources=float(res), share=share, efficiency=self.efficiency)
-			ind.reproduce(fecundity=self.fecundity)
-			self.pool.extend([indiv] * ind.offspring)
-
 
 		self.vigilance = totalVigilance
 

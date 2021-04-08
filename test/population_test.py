@@ -2,6 +2,7 @@ from model.population import Population as Pop
 from model.individual import Individual as Ind
 from model.grid import Grid
 import numpy as np
+import gc
 
 class TestPopulationObject(object):
 
@@ -33,46 +34,13 @@ class TestPopulationObject(object):
 
 	def test_population_has_life_cycle(self):
 		assert hasattr(Pop(), "lifeCycle")
-		assert callable(getattr(Pop(), "lifeCycle"))
+		assert callable(getattr(Pop(), "lifeCycle"))	
 
-	def test_life_cycle_returns_offspring_pool(self):
-		self.pop = Pop(par="test/test/parameters.txt")
-		self.pop.create(n=10)
-		self.pop.lifeCycle()
+	# def test_share_calculated_and_assigned_to_grid(self):
+	# 	assert False, "write this test"
 
-		assert hasattr(self.pop, "pool"), "population pool does not exist"
-		assert type(self.pop.pool) is list
-
-		for elem in self.pop.pool:
-			assert type(elem) is int
-			assert elem in range(10)
-
-	def test_pool_gives_individuals_storage(self):
-		self.pop = Pop(par="test/test/parameters.txt")
-		self.pop.create()
-
-		for i in self.pop.individuals:
-			i.vigilance = 0
-
-		self.pop.lifeCycle()
-
-		for i in self.pop.individuals:
-			assert i.storage > 0
-
-	def test_pool_corresponds_to_number_of_offspring_per_individual(self):
-		self.pop = Pop(par="test/test/parameters.txt")
-		self.pop.create(n=10)
-		self.pop.lifeCycle()
-
-		for ind in range(10):
-			indiv = self.pop.individuals[ind]
-			assert indiv.offspring == self.pop.pool.count(ind), "wrong offspring number"
-
-	def test_share_calculated_and_assigned_to_grid(self):
-		assert False, "write this test"
-
-	def test_pool_is_wiped_out_at_beginning_of_cycle(self):
-		assert False, "write this test"
+	# def test_pool_is_wiped_out_at_beginning_of_cycle(self):
+	# 	assert False, "write this test"
 
 	def test_life_cycle_returns_output_info(self):
 		self.pop = Pop(par="test/test/parameters.txt")
@@ -83,9 +51,6 @@ class TestPopulationObject(object):
 		assert self.pop.vigilance is not None
 		assert type(self.pop.vigilance) is float
 		assert 0 <= self.pop.vigilance <= 1
-
-	def test_individuals_placed_on_grid_at_beginning_of_simulation(self):
-		assert False, "write this test"
 
 	def test_population_creates_grid(self):
 		self.pop = Pop("test/test/parameters.txt")
@@ -138,7 +103,28 @@ class TestPopulationObject(object):
 		assert self.pop.vcell.shape == (m,m)
 
 	def test_only_live_individuals_explore(self):
-		assert False, "write this test"
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		coordH = []
+		coordV = []
+
+		for ind in self.pop.individuals:
+			ind.vigilance = 0
+			coordH.append(ind.coordinates[0])
+			coordV.append(ind.coordinates[1])
+
+
+		self.pop.explore()
+		
+		coordH2= []
+		coordV2 = []
+		for ind in self.pop.individuals:
+			coordH2.append(ind.coordinates[0])
+			coordV2.append(ind.coordinates[1])
+
+		assert all([x == y for x in coordH for y in coordH2])
+		assert all([x == y for x in coordV for y in coordV2])
+
 
 	def test_population_can_gather_vs_survive(self):
 		assert hasattr(Pop(), "gatherAndSurvive")
@@ -150,6 +136,18 @@ class TestPopulationObject(object):
 			self.pop.gatherAndSurvive()
 		except ValueError as e:
 			assert False, "missing info: {0}".format(e)
+
+	def test_gathering_gives_individuals_storage(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+
+		for i in self.pop.individuals:
+			i.vigilance = 0
+
+		self.pop.gatherAndSurvive()
+
+		for i in self.pop.individuals:
+			assert i.storage > 0
 
 	def test_population_has_a_routine(self):
 		assert hasattr(Pop(), "routine")
@@ -180,4 +178,56 @@ class TestPopulationObject(object):
 		assert compareGrids.all()
 
 	def test_reproduction_at_population_level(self):
-		
+		assert hasattr(Pop(), "reproduce")
+		assert callable(getattr(Pop(), "reproduce"))
+
+		gc.collect()
+
+	def test_reproduction_creates_pool(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		self.pop.routine()
+		self.pop.reproduce()
+
+		assert hasattr(self.pop, "nextGeneration"), "population pool does not exist"
+		assert type(self.pop.pool) is list
+		assert len(self.pop.pool) > 0
+
+		for elem in self.pop.pool:
+			assert type(elem) is int
+			assert elem in range(10)
+
+		gc.collect()
+
+	# def test_pool_is_offspring_per_individual(self):
+	# 	self.pop = Pop(par="test/test/parameters.txt")
+	# 	self.pop.create()
+	# 	self.pop.routine()
+	# 	self.pop.reproduce()
+
+	# 	count = []
+
+	# 	for ind in range(self.pop.nIndiv):
+	# 		indiv = self.pop.individuals[ind]
+	# 		count.append(indiv.offspring)
+
+	# 	for ind in range(self.pop.nIndiv):
+	# 		indiv = self.pop.individuals[ind]
+	# 		assert indiv.offspring == self.pop.pool.count(ind), "wrong offspring number for individual {1} in {0}. Counts: {2}".format(self.pop.pool, ind, count)
+
+	def test_population_gets_updated_at_new_gen(self):
+		assert hasattr(Pop(), "update")
+		assert callable(getattr(Pop(), "update"))
+
+	def test_update_replaces_old_gen_with_new_gen(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		self.pop.routine()
+		self.pop.reproduce()
+		oldgen = self.pop.individuals
+		self.pop.update()
+
+		assert len(self.pop.individuals) == self.pop.nIndiv
+		assert self.pop.individuals != oldgen
+
+
