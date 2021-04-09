@@ -47,6 +47,8 @@ pop.launch()
 ```
 You can directly run this code from the root with `python run.py`.
 
+To create animation, run `r animate_sim.r`.
+
 ### Parameters
 Change parameter values in `parameters.txt`.
 
