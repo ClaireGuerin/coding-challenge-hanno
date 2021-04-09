@@ -163,7 +163,7 @@ class Population(object):
 		self.update()
 
 
-	def launch(self):
+	def launch(self, dev="off"):
 		""" Launch a full simulation over self.nGen generations.
 		Write out mean vigilance level over generation time in "vigilance.txt" file
 		Interrupt simulation if population extinct (self.deathCount = 0).
