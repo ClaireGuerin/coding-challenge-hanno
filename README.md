@@ -36,7 +36,7 @@ This code was developped under Python 3.7.3, and requires:
 - MatPlotLib
 
 ## Usage
-```
+```python
 from model.population import Population as Pop
 
 pop = Pop(dev='on')
