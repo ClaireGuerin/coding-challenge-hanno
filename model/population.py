@@ -11,12 +11,19 @@ from model.grid import Grid
 import numpy as np
 import random as rd
 import matplotlib.pyplot as plt
+import logging
 
 class Population(object):
 
 	def __init__(self, par="parameters.txt", v=0.5, dev='off'):
 		""" Initialize population by extracting parameter values from file and assigning them to self.
 		"""
+		logging.basicConfig(level=logging.INFO,
+							format='[%(asctime)s]::%(levelname)s  %(message)s',
+							datefmt='%Y.%m.%d - %H:%M:%S')
+
+		logging.info('Population created')
+
 		attrs = fman.extractColumnFromFile(par, 0)
 		vals = fman.extractColumnFromFile(par, 1)
 		for attr,val in zip(attrs, vals):
@@ -169,8 +176,12 @@ class Population(object):
 				f.write('{0}\n'.format(round(self.vigilance, 3)))
 
 				if self.deathCount == self.nIndiv:
+					logging.info('Population extinct')
 					break
 				else:
 					self.deathCount = 0
+
+		logging.info('End of simulation')
+
 
 					
