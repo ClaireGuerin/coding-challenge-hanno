@@ -10,7 +10,7 @@ master|[![Build Status](https://www.travis-ci.com/ClaireGuerin/coding-challenge-
 develop|[![Build Status](https://www.travis-ci.com/ClaireGuerin/coding-challenge-hanno.svg?branch=develop)](https://www.travis-ci.com/ClaireGuerin/coding-challenge-hanno)|[![codecov](https://codecov.io/gh/ClaireGuerin/coding-challenge-hanno/branch/develop/graph/badge.svg?token=IXKD9GDK7P)](https://codecov.io/gh/ClaireGuerin/coding-challenge-hanno)
 
 ## Visual
-![vanim](vigilance.gif)
+![vanim](animreadme.gif)
 
 ## Model description
 
