@@ -1,8 +1,7 @@
 rm(list = ls())
 
-#install.packages("tidyverse")
-#install.packages("gganimate")
-#install.packages("gifski")
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, gifski, gganimate)
 library(tidyverse)
 library(gganimate)
 
@@ -11,8 +10,9 @@ library(gganimate)
 #library(rlang)
 
 #==== Import vigilance data ====
-#vigilance <- runif(n=100,min=0,max=1)
-#time <- seq(1,length(vigilance))
+# Below is a small commented out script to create fake data
+# vigilance <- runif(n=100,min=0,max=1)
+# time <- seq(1,length(vigilance))
 # vigilance_data <- vigilance %>% 
 #   as_tibble() %>%
 #   rename(vigilance = value) %>%
@@ -37,9 +37,7 @@ vPlot <- vigilance_data %>%
 anim_save("vigilance.gif", vPlot)
 
 #==== Import ecosystem data ====
-#resources <- read_csv("resources.txt") 
-#movement <- read_csv("movement.txt") 
+#resources <- read_csv("resources_out.txt") 
+#movement <- read_csv("movement_out.txt") 
 
-#resources <- tibble(t = )
-  
-#==== Plot ecosystem
+#==== Plot ecosystem ====

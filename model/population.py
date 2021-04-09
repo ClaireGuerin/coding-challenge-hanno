@@ -15,7 +15,7 @@ import logging
 
 class Population(object):
 
-	def __init__(self, par="parameters.txt", v=0.5, dev='off'):
+	def __init__(self, par="parameters.txt", v=0.5):
 		""" Initialize population by extracting parameter values from file and assigning them to self.
 		"""
 		logging.basicConfig(level=logging.INFO,
@@ -29,7 +29,6 @@ class Population(object):
 		for attr,val in zip(attrs, vals):
 			setattr(self, attr, val)
 		self.v = v # initial vigilance level can be given by user
-		self.dev = dev
 
 	def create(self, n=None):
 		""" Create the population.

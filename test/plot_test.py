@@ -1,27 +1,12 @@
 import pytest
 from model.population import Population as Pop
-import matplotlib.pyplot as plt
 
 class TestPlottingFunction(object):
 
 	def test_population_has_plotting_option(self):
-		self.pop = Pop("test/test/parameters.txt",dev='on')
+		self.pop = Pop("test/test/parameters.txt")
 		self.pop.create()
-		self.pop.launch()
-
-		# set to empty list [] for now, should remove when dev on functions properly
-		assert plt.get_fignums() == []
-
-# xdata = []
-# ydata = []
-# plt.show()
-# axes = plt.gca()
-# axes.set_xlim(0, self.nGen)
-# axes.set_ylim(0, 1)
-# line, = axes.plot(xdata, ydata, 'k-')
-# xdata.append(gen)
-# ydata.append(self.vigilance)
-# line.set_xdata(xdata)
-# line.set_ydata(ydata)
-# plt.draw()
-# plt.show()
+		try:
+			self.pop.launch(dev='on')
+		except TypeError as e:
+			assert False, "allow for 'on' device to show plots"
