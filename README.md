@@ -39,17 +39,23 @@ This code was developped for Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and 
 
 To install these packages on Linux, run `python -m pip install --user scipy matplotlib`.
 
+For visual output (`dev='on'`), Rust is required. To install, run:
+- `yum install cargo` (Fedora/CentOS)
+- `apt-get install cargo` (Debian/Ubuntu)
+- `brew install rust` (MacOS)
+
 ## Usage
 ```python
 from model.population import Population as Pop
 
-pop = Pop(dev='on')
+pop = Pop()
 pop.create()
-pop.launch()
+pop.launch(dev='on')
 ```
 You can directly run this code from the root with `python run.py`.
-
-To create animation, run `r animate_sim.r`.
+The program will create:
+- a text file with vigilance means over generation times (`vigilance_out.txt`).
+- an animated visualisation of the evolution of vigilance (`vigilance_out.gif`).
 
 ### Parameters
 Change parameter values in `parameters.txt`.

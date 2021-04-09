@@ -12,6 +12,7 @@ import numpy as np
 import random as rd
 import matplotlib.pyplot as plt
 import logging
+import os
 
 class Population(object):
 
@@ -162,7 +163,6 @@ class Population(object):
 		self.reproduce()
 		self.update()
 
-
 	def launch(self, dev="off"):
 		""" Launch a full simulation over self.nGen generations.
 		Write out mean vigilance level over generation time in "vigilance.txt" file
@@ -181,6 +181,10 @@ class Population(object):
 					self.deathCount = 0
 
 		logging.info('End of simulation')
+
+		if dev=="on":
+			logging.info('Creating visuals...')
+			os.system("Rscript animate_sim.r")
 
 
 					
