@@ -12,5 +12,6 @@ In this model, a population of preys roams around and collects resources from a 
 
 1. move on the ecosystem grid by one step, that is to say to a neighbouring grid cell. The destination cell is chosen randomly from the neighbouring cells (including the origin cell: the individual can stay on the same cell over one time step).
 2. gather resources within their current cell. Considering there is a total of $R$ resources in the cell at the time. When there are several individuals in the cell, they share the resources fairly as follows:
-$\R\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma}$
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\R\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma}" title="\Large \R\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma}" />
 
