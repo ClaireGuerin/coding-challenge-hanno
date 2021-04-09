@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+""" Prey population
+
+Stores and updates all individuals in the population as Individual class objects, as well as ecosystem information in a Grid class object.
+Simulate life cycle over multiple generations.
+"""
+
 import model.filemanip as fman
 from model.individual import Individual as Ind
 from model.grid import Grid
@@ -8,25 +15,37 @@ import matplotlib.pyplot as plt
 class Population(object):
 
 	def __init__(self, par="parameters.txt", v=0.5, dev='off'):
+		""" Initialize population by extracting parameter values from file and assigning them to self.
+		"""
 		attrs = fman.extractColumnFromFile(par, 0)
 		vals = fman.extractColumnFromFile(par, 1)
 		for attr,val in zip(attrs, vals):
 			setattr(self, attr, val)
-		#initial vigilance level can be given by user
-		self.v = v
+		self.v = v # initial vigilance level can be given by user
 		self.dev = dev
 
 	def create(self, n=None):
+		""" Create the population.
+		Return nothing
+		Create n Individual prey instances and store in self.individuals
+		Create ecosystem Grid instance and store in self.grid.
+		"""
 		if n == None:
 			n = self.nIndiv
 
-		self.deathCount = 0
+		self.deathCount = 0 # everyone is alive at the beginning of the simulation
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
 		for i in range(n):
 			self.individuals.append(Ind(m=self.gridSize, v=self.v))
 
 	def explore(self):
+		""" Loop over all live individuals in the population and make them move on the ecoystem grid.
+		Return nothing
+		Update individual instance's coordinates
+		Create self.ncell matrix of grid dimensions to store information on the number of individual in each grid cell
+		Create self.vcell matrix of grid dimensions to store information on the vigilance level in each cell.
+		"""
 		self.ncell = np.zeros([self.gridSize, self.gridSize])
 		self.vcell = np.zeros([self.gridSize, self.gridSize])
 
@@ -40,7 +59,11 @@ class Population(object):
 				self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
 
 	def gatherAndSurvive(self):
-
+		""" Loop over all live individuals in the population and make them gather resources and survive.
+		Return nothing
+		Update individual instance's storage value
+		Update individual instance's alive value
+		"""
 		for ind in self.individuals:
 			if ind.alive == False:
 				continue
@@ -52,7 +75,11 @@ class Population(object):
 				ind.survive(p = self.predation)
 
 	def routine(self):
-
+		""" Uses explore() and gatherAndSurvive() methods to implement full routine of a single time step.
+		Return nothing
+		Update self.grid.share: resource share in each cell on the grid after exploration and before gathering
+		Update self.grid.resources: update amount of resources in each cell on the grid after gathering.
+		"""
 		self.explore()
 
 		# share in a cell S = SUM(1-v_i)/(gamma*n)
@@ -74,7 +101,11 @@ class Population(object):
 		self.grid.resources = resourceGrowth * resourceConsumption
 
 	def reproduce(self):
-		#parent = range(self.nIndiv)
+		""" Loop over all live individuals in the population and make them reproduce.
+		Return nothing
+		Create offspring pool and draw nIndiv individuals from it for the next generation.
+		Count the number of dead in the population.
+		"""
 		offspring = []
 
 		for ind in self.individuals:
@@ -82,7 +113,6 @@ class Population(object):
 				self.deathCount += 1
 				offspring.append(0)
 			else:
-				#assert hasattr(ind, "offspring") == False
 				ind.reproduce(fecundity=self.fecundity)
 				offspring.append(ind.offspring)
 				assert offspring[-1] == ind.offspring, "wrong order in offspring number"
@@ -92,7 +122,12 @@ class Population(object):
 			k=self.nIndiv)
 
 	def update(self):
-
+		""" Update population
+		Return nothing
+		Create new individual instances for the new generation, who inherit their parent's vigilance level and coordinates on the grid.
+		Mutate individual vigilance phenotype.
+		Calculate mean vigilance in the population and store it in self.vigilance.
+		"""
 		tmpIndividuals = []
 		self.totalVigilance = 0
 		
@@ -111,7 +146,10 @@ class Population(object):
 		self.vigilance = self.totalVigilance / self.nIndiv
 
 	def lifeCycle(self):	
-
+		""" Full life cycle over one generation.
+		Run the routine for self.routineSteps number of steps.
+		Reproduce individuals and update population.
+		"""
 		for steps in range(self.routineSteps):
 			self.routine()
 
@@ -120,7 +158,10 @@ class Population(object):
 
 
 	def launch(self):
-
+		""" Launch a full simulation over self.nGen generations.
+		Write out mean vigilance level over generation time in "vigilance.txt" file
+		Interrupt simulation if population extinct (self.deathCount = 0).
+		"""
 		with open("vigilance_out.txt", "w") as f:
 
 			for gen in range(self.nGen):
