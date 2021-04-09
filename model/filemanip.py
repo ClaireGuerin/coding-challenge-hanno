@@ -1,20 +1,18 @@
+# -*- coding: utf-8 -*-
+"""File Manipulation
+
+Scan and extract info from files
+"""
+
 import os 
 
-def getPathToFile(filename, dirname=None):
-	if dirname is None:
-		f = filename
-	else:
-		f = '{0}/{1}'.format(dirname,filename)
-	return "{0}/{1}".format(os.getcwd(), f)
-	
-def searchFile(fileToRead, string):
-	with open(fileToRead) as f:
-		if string in f.read():
-			assert True
-		else:
-			assert False, "{0} not provided in {1}".format(string, fileToRead)		
-	
 def extractColumnFromFile(fileToRead, col):
+	"""Return a list
+	
+	Extracts data from fileToRead (comma-separated) for column col.
+	Automatically detects data type (str, int, float).
+	Creates a list for each line of the column.
+	"""
 	with open(fileToRead) as f:
 		dataList = []
 		for line in f.readlines():
