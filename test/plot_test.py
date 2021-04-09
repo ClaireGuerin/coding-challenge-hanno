@@ -1,27 +1,33 @@
 import pytest
 from model.population import Population as Pop
-import matplotlib.pyplot as plt
+import os
+
+@pytest.mark.skipif("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", 
+reason="Skipping this test on Travis CI.")
 
 class TestPlottingFunction(object):
 
 	def test_population_has_plotting_option(self):
-		self.pop = Pop("test/test/parameters.txt",dev='on')
+		self.pop = Pop("test/test/parameters.txt")
 		self.pop.create()
+		try:
+			self.pop.launch(dev='on')
+		except TypeError as e:
+			assert False, "allow for 'on' device to show plots"
+		os.remove("vigilance_out.txt")
+		os.remove("vigilance_out.gif")
+
+	def test_gif_is_created_only_when_dev_on(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		self.pop.launch(dev='on')
+
+		self.filesListRootOut = os.listdir(".")
+		assert "vigilance_out.gif" in self.filesListRootOut, "no output gif created"
+		os.remove("vigilance_out.txt")
+		os.remove("vigilance_out.gif")
+
 		self.pop.launch()
-
-		# set to empty list [] for now, should remove when dev on functions properly
-		assert plt.get_fignums() == []
-
-# xdata = []
-# ydata = []
-# plt.show()
-# axes = plt.gca()
-# axes.set_xlim(0, self.nGen)
-# axes.set_ylim(0, 1)
-# line, = axes.plot(xdata, ydata, 'k-')
-# xdata.append(gen)
-# ydata.append(self.vigilance)
-# line.set_xdata(xdata)
-# line.set_ydata(ydata)
-# plt.draw()
-# plt.show()
+		self.filesListRootOut = os.listdir(".")
+		assert "vigilance_out.gif" not in self.filesListRootOut, "should not have created output gif!"
+		os.remove("vigilance_out.txt")
