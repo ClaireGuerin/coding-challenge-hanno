@@ -11,6 +11,7 @@ from model.grid import Grid
 import numpy as np
 import random as rd
 import matplotlib.pyplot as plt
+import logging
 
 class Population(object):
 
