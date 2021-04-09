@@ -33,9 +33,11 @@ After a number of time steps (user-defined), the individuals who survived reprod
 Simply download this repository and place wherever convenient on your machine.
 
 ## Requirements
-This code was developped under Python 3.7.3, and requires:
+This code was developped for Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and requires:
 - SciPy
 - MatPlotLib
+
+To install these packages on Linux, run `python -m pip install --user scipy matplotlib`.
 
 ## Usage
 ```python
