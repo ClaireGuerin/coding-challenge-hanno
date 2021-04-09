@@ -19,15 +19,13 @@ class TestSimpleRun(object):
 	def test_simulation_can_be_launched(self):
 		self.population = Pop()
 
-		try:
-		 	self.population.launch()
-		except AttributeError as e:
-			assert False, "population has no launching method"
-
-	# The simulation runs for the number of generations given in paramaters. An output file is created with information on vigilance level in the population
+		assert hasattr(self.population, "launch"), "population has no launching method"
+		assert callable(getattr(self.population, "launch"))
+	# The simulation runs for the number of generations given in parameters. An output file is created with information on vigilance level in the population
 
 	def test_simulation_runs_for_n_gen(self):
-		self.population = Pop()
+		self.population = Pop(par="test/test/parameters.txt")
+		self.population.create()
 		self.population.launch()
 		self.filesListRootOut = os.listdir(".")
 
@@ -38,7 +36,13 @@ class TestSimpleRun(object):
 
 	def test_simulation_runs_for_exact_generations(self):
 		self.population = Pop(par="test/test/parameters.txt")
+		self.predation = 0
+		self.population.create()
 		self.population.launch()
+
+		assert self.population.deathCount != self.population.nIndiv
+		for ind in self.population.individuals:
+			assert ind.alive
 
 		with open("vigilance_out.txt", "r") as fOut:
 			lineCount = len(fOut.readlines())
