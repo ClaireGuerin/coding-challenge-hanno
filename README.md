@@ -49,16 +49,27 @@ You can directly run this code from the root with `python run.py`.
 Change parameter values in `parameters.txt`.
 
 > `gridSize` the length of one square ecosystem grid side, e.g. `10`.
+> 
 > `nIndiv` the number of individuals at the beginning of each generation, e.g. `20`.
+> 
 > `nGen` the number of generations to run the simulation for, e.g. `300`.
+> 
 > `routineSteps` the number of time steps in the life cycle before reproduction, e.g. `4`.
+> 
 > `mutRate` the mutation rate, e.g. `0.01`.
+> 
 > `mutStep` the mutation step (variance), e.g. `0.005`.
+> 
 > `initRes` the initial amount of resources in each cell on the ecosystem grid, e.g. `1.0`.
+> 
 > `efficiency` the gathering efficiency of resources by preys (alpha), e.g. `0.8`.
+> 
 > `predation` the basal predation rate in the absence of vigilance, e.g. `0.3`.
+> 
 > `competition` the competition level for shared resources (gamma), e.g. `2.1`.
+> 
 > `growth` the resources natural growth rate (r), e.g. `1.2`.
+> 
 > `fecundity` the individual fecundity, e.g. `1.5`.
 
 ## Roadmap
