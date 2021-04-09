@@ -2,6 +2,9 @@ import pytest
 from model.population import Population as Pop
 import os
 
+@pytest.mark.skipif("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", 
+reason="Skipping this test on Travis CI.")
+
 class TestPlottingFunction(object):
 
 	def test_population_has_plotting_option(self):
