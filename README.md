@@ -6,6 +6,8 @@ Branch|Travis|CodeCov
 master|[![Build Status](https://www.travis-ci.com/ClaireGuerin/coding-challenge-hanno.svg?branch=main)](https://www.travis-ci.com/ClaireGuerin/coding-challenge-hanno)|[![codecov](https://codecov.io/gh/ClaireGuerin/coding-challenge-hanno/branch/main/graph/badge.svg?token=IXKD9GDK7P)](https://codecov.io/gh/ClaireGuerin/coding-challenge-hanno)
 develop|[![Build Status](https://www.travis-ci.com/ClaireGuerin/coding-challenge-hanno.svg?branch=develop)](https://www.travis-ci.com/ClaireGuerin/coding-challenge-hanno)|[![codecov](https://codecov.io/gh/ClaireGuerin/coding-challenge-hanno/branch/develop/graph/badge.svg?token=IXKD9GDK7P)](https://codecov.io/gh/ClaireGuerin/coding-challenge-hanno)
 
+![vanim](vigilance.gif)
+
 ## Model description
 
 In this model, a population of preys roams around and collects resources from a bounded ecosystem. The ecosystem is a squared grid of a defined size. Predation risk is constant and diffused over the whole grid. Over a specific amount of time steps, an individual will repeat a routine as follows:
