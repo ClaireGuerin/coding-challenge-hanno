@@ -56,10 +56,12 @@ pop = Pop()
 pop.create()
 pop.launch(dev='on')
 ```
-You can directly run this code from the root with `python run.py`.
+You can directly run this code from the root with `python run.py`. 
 The program will create:
 - a text file with vigilance means over generation times (`vigilance_out.txt`).
 - an animated visualisation of the evolution of vigilance (`vigilance_out.gif`).
+
+*Turn dev `'on'` and `'off'` depending on whether you want the visual output.*
 
 ### Parameters
 Change parameter values in `parameters.txt`.
