@@ -42,10 +42,11 @@ Simply download this repository and place wherever convenient on your machine.
 ## Requirements
 This code was developped for Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and requires SciPy. To install Python, follow [these guidelines](https://docs.python-guide.org/starting/install3/linux/). To install the SciPy package on Linux, run `python -m pip install --user scipy`.
 
-For visual output (`dev='on'`), Rust is required. To install, run:
-- `yum install cargo` (Fedora/CentOS)
-- `apt-get install cargo` (Debian/Ubuntu)
-- `brew install rust` (MacOS)
+For visual output (`dev='on'`), Rust and xdg-utils are required. To install, run
+```shell
+apt-get install cargo
+apt-get install -y xdg-utils
+```
 
 ## Usage
 ```python
