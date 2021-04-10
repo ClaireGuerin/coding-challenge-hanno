@@ -323,3 +323,23 @@ class TestPopulationObject(object):
 			collectVigilances.append(ind.vigilance)
 
 		assert self.pop.vigilance == pytest.approx(np.mean(collectVigilances), 0.1)
+
+	def test_lam_error_when_resources_too_big(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.initRes = 20000000000000000000
+		self.pop.create()
+		try:
+			self.pop.lifeCycle()
+		except ValueError as e:
+			assert str(e) == 'lam value too large', "This program should fail at poisson random draw, not '{0}'".format(e)
+
+	def test_resources_crash_when_too_large(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.initRes = 20
+		self.pop.growth = 100
+		self.pop.create()
+		self.pop.lifeCycle()
+
+		for cell in np.nditer(self.pop.grid.resources):
+			assert cell <= self.pop.initRes, "resources too large, should have crashed"
+

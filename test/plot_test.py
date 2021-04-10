@@ -3,7 +3,7 @@ from model.population import Population as Pop
 import os
 
 @pytest.mark.skipif("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", 
-reason="Skipping this test on Travis CI.")
+reason="These tests involve other languages that cannot be installed on Travis at the same time as Python")
 
 class TestPlottingFunction(object):
 

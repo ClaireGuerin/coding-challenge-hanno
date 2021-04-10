@@ -21,8 +21,7 @@ class TestExplorationFunction(object):
 			storeStepsH[i] = before[0] - after[0]
 			storeStepsV[i] = before[1] - after[1]
 
-		assert any([x!=0 for x in storeStepsH]), "individual does not change horizontal"
-		assert any([x!=0 for x in storeStepsV]), "individual does not change vertical"
+		assert any([x!=0 for x in storeStepsH]) or any([x!=0 for x in storeStepsV]), "no individual changed position!"
 
 	def test_steps_are_between_minus_one_and_one(self):
 		gridSide = 6
