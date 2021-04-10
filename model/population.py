@@ -198,6 +198,9 @@ class Population(object):
 		Write out mean vigilance level over generation time in "vigilance.txt" file
 		Interrupt simulation if population extinct (self.deathCount = 0).
 		"""
+		if not os.path.exists('output'):
+			os.makedirs('output')
+
 		with open("output/vigilance_out.txt", "w", buffering=1) as vigilanceFile, \
 			open("output/resources_out.txt", "w", buffering=1) as resourcesFile, \
 			open("output/exploration_out.txt", "w", buffering=1) as explorationFile:
