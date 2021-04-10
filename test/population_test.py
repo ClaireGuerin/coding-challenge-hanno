@@ -261,10 +261,12 @@ class TestPopulationObject(object):
 		self.pop.launch()
 		
 		#assert self.pop.deathCount == self.pop.nIndiv, "there are {0} unexpected survivors".format(self.pop.nIndiv - self.pop.deathCount)
-		with open("vigilance_out.txt", "r") as fOut:
+		with open("output/vigilance_out.txt", "r") as fOut:
 			lineCount = len(fOut.readlines())
 		assert lineCount == 1
-		os.remove("vigilance_out.txt")
+		os.remove("output/vigilance_out.txt")
+		os.remove("output/resources_out.txt")
+		os.remove("output/exploration_out.txt")
 
 
 	# def test_pool_is_offspring_per_individual(self):
@@ -342,4 +344,31 @@ class TestPopulationObject(object):
 
 		for cell in np.nditer(self.pop.grid.resources):
 			assert cell <= self.pop.initRes, "resources too large, should have crashed"
+
+	def test_population_keeps_track_of_ecological_time(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+
+		assert hasattr(self.pop, "ecoTime"), "population must keep track of its ecological time!"
+
+	def test_ecological_time_correctly_assessed(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		self.pop.lifeCycle()
+		ngen = 5
+
+		assert self.pop.ecoTime == self.pop.routineSteps, "one life cycle should be {0} units of ecological time, not {1}".format(self.pop.routineSteps, self.pop.ecoTime)
+
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		for i in range(ngen):
+			self.pop.lifeCycle()
+
+		assert self.pop.ecoTime == self.pop.routineSteps * ngen, "{2} life cycles should be {0} units of ecological time, not {1}".format(self.pop.routineSteps * 10, self.pop.ecoTime, ngen)
+	# def test_resources_change_data_kept_over_time(self):
+	# 	self.pop = Pop(par="test/test/parameters.txt")
+	# 	self.pop.create()
+	# 	self.pop.routine()
+
+	# 	assert False, "write this test"
 

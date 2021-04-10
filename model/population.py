@@ -40,6 +40,7 @@ class Population(object):
 			n = self.nIndiv
 
 		self.deathCount = 0 # everyone is alive at the beginning of the simulation
+		self.ecoTime = 0 # ecological time set to zero at beginning of simulation
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
 		for i in range(n):
@@ -83,9 +84,12 @@ class Population(object):
 	def routine(self):
 		""" Uses explore() and gatherAndSurvive() methods to implement full routine of a single time step.
 		Return nothing
+		Update self.ecoTime: increment ecological time by 1 unit
 		Update self.grid.share: resource share in each cell on the grid after exploration and before gathering
 		Update self.grid.resources: update amount of resources in each cell on the grid after gathering.
 		"""
+		self.ecoTime += 1
+
 		self.explore()
 
 		# share in a cell S = SUM(1-v_i)/(gamma*n)
