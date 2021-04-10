@@ -43,6 +43,7 @@ class Population(object):
 		self.deathCount = 0 # everyone is alive at the beginning of the simulation
 		self.ecoTime = 0 # ecological time set to zero at beginning of simulation
 		self.ecologyShortHistory = np.empty([0, 4])
+		self.explorationShortHistory = np.empty([0, 3])
 
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
@@ -67,6 +68,9 @@ class Population(object):
 				ind.explore()
 				self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
 				self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
+				exploration = np.array([[self.ecoTime, ind.coordinates[0], ind.coordinates[1]]])
+				addExploration = np.concatenate((self.explorationShortHistory, exploration))
+				self.explorationShortHistory = addExploration
 
 	def gatherAndSurvive(self):
 		""" Loop over all live individuals in the population and make them gather resources and survive.
@@ -124,8 +128,8 @@ class Population(object):
 			tmpEcologyHistory[pos,3] = newResources[cell[0], cell[1]]
 			pos += 1
 
-		tmpHistory = np.concatenate((self.ecologyShortHistory, tmpEcologyHistory))
-		self.ecologyShortHistory = tmpHistory
+		addEcologicalHistory = np.concatenate((self.ecologyShortHistory, tmpEcologyHistory))
+		self.ecologyShortHistory = addEcologicalHistory
 
 		self.grid.resources = newResources
 		assert type(self.grid.resources) == np.ndarray
@@ -181,6 +185,7 @@ class Population(object):
 		Reproduce individuals and update population.
 		"""
 		self.ecologyShortHistory = np.empty([0, 4]) # reset ecology history for new cycle
+		self.explorationShortHistory = np.empty([0, 3]) # reset ecology history for new cycle
 
 		for steps in range(self.routineSteps):
 			self.routine()
@@ -201,7 +206,7 @@ class Population(object):
 				self.lifeCycle()
 				vigilanceFile.write('{0}\n'.format(round(self.vigilance, 3)))
 				np.savetxt(resourcesFile, self.ecologyShortHistory, fmt='%1.3f')
-				explorationFile.write('baa\n')
+				np.savetxt(explorationFile, self.explorationShortHistory, fmt='%1.3f')
 
 				if self.deathCount == self.nIndiv:
 					logging.info('Population extinct')

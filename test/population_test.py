@@ -248,22 +248,6 @@ class TestPopulationObject(object):
 
 		assert self.pop.deathCount == 10
 
-	# def test_pool_is_offspring_per_individual(self):
-	# 	self.pop = Pop(par="test/test/parameters.txt")
-	# 	self.pop.create()
-	# 	self.pop.routine()
-	# 	self.pop.reproduce()
-
-	# 	count = []
-
-	# 	for ind in range(self.pop.nIndiv):
-	# 		indiv = self.pop.individuals[ind]
-	# 		count.append(indiv.offspring)
-
-	# 	for ind in range(self.pop.nIndiv):
-	# 		indiv = self.pop.individuals[ind]
-	# 		assert indiv.offspring == self.pop.pool.count(ind), "wrong offspring number for individual {1} in {0}. Counts: {2}".format(self.pop.pool, ind, count)
-
 	def test_population_gets_updated_at_new_gen(self):
 		assert hasattr(Pop(), "update")
 		assert callable(getattr(Pop(), "update"))
@@ -348,7 +332,6 @@ class TestPopulationObject(object):
 	def test_population_keeps_track_of_resources_over_life_cycle(self):
 		self.pop = Pop(par="test/test/parameters.txt")
 		self.pop.create()
-		self.pop.routine()
 
 		assert hasattr(self.pop, "ecologyShortHistory"), "population must keep track of its ecological history!"
 
@@ -358,4 +341,19 @@ class TestPopulationObject(object):
 		for i in range(self.pop.routineSteps):
 			self.pop.routine()
 
-		assert self.pop.ecologyShortHistory.shape == ((self.pop.gridSize ** 2) * self.pop.routineSteps,4)
+		assert self.pop.ecologyShortHistory.shape == ((self.pop.gridSize ** 2) * self.pop.routineSteps, 4)
+
+	def test_population_keeps_track_of_exploration_over_life_cycle(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+
+		assert hasattr(self.pop, "explorationShortHistory"), "population must keep track of its exploration history!"
+
+	def test_exploration_info_augmented_at_each_routine(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.predation = 0
+		self.pop.create()
+		for i in range(self.pop.routineSteps):
+			self.pop.routine()
+
+		assert self.pop.explorationShortHistory.shape == (self.pop.nIndiv * self.pop.routineSteps, 3)
