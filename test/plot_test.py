@@ -31,3 +31,13 @@ class TestPlottingFunction(object):
 		self.filesListRootOut = os.listdir(".")
 		assert "vigilance_out.gif" not in self.filesListRootOut, "should not have created output gif!"
 		os.remove("vigilance_out.txt")
+
+	def test_grid_gif_is_created(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.create()
+		self.pop.launch(dev='on')
+
+		self.filesListRootOut = os.listdir(".")
+		assert "grid_out.gif" in self.filesListRootOut, "no output grid gif created"
+		os.remove("vigilance_out.txt")
+		os.remove("vigilance_out.gif")

@@ -10,7 +10,6 @@ from model.individual import Individual as Ind
 from model.grid import Grid
 import numpy as np
 import random as rd
-import matplotlib.pyplot as plt
 import logging
 import os
 
@@ -171,11 +170,15 @@ class Population(object):
 		Write out mean vigilance level over generation time in "vigilance.txt" file
 		Interrupt simulation if population extinct (self.deathCount = 0).
 		"""
-		with open("vigilance_out.txt", "w") as f:
+		with open("vigilance_out.txt", "w", buffering=1) as vigilanceFile, \
+			open("resources_out.txt", "w", buffering=1) as resourcesFile, \
+			open("exploration_out.txt", "w", buffering=1) as explorationFile:
 
 			for gen in range(self.nGen):
 				self.lifeCycle()
-				f.write('{0}\n'.format(round(self.vigilance, 3)))
+				vigilanceFile.write('{0}\n'.format(round(self.vigilance, 3)))
+				resourcesFile.write('boo\n')
+				explorationFile.write('baa\n')
 
 				if self.deathCount == self.nIndiv:
 					logging.info('Population extinct')
