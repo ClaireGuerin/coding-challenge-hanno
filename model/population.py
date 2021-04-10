@@ -105,7 +105,10 @@ class Population(object):
 		# where S is the shares as calculated previously
 		resourceGrowth = self.grid.resources * self.growth
 		resourceConsumption = 1 - self.efficiency * shares
-		self.grid.resources = resourceGrowth * resourceConsumption
+		newResources = resourceGrowth * resourceConsumption
+		newResources[newResources > (200 / self.fecundity)] = self.initRes # resources crash when there's too much of it in a cell, and go back to initial amount.
+		self.grid.resources = newResources
+		assert type(self.grid.resources) == np.ndarray
 
 	def reproduce(self):
 		""" Loop over all live individuals in the population and make them reproduce.
