@@ -356,4 +356,4 @@ class TestPopulationObject(object):
 		for i in range(self.pop.routineSteps):
 			self.pop.routine()
 
-		assert self.pop.explorationShortHistory.shape == (self.pop.nIndiv * self.pop.routineSteps, 3)
+		assert self.pop.explorationShortHistory.shape == (self.pop.nIndiv * self.pop.routineSteps, 4)

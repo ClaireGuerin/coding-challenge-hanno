@@ -43,7 +43,7 @@ class Population(object):
 		self.deathCount = 0 # everyone is alive at the beginning of the simulation
 		self.ecoTime = 0 # ecological time set to zero at beginning of simulation
 		self.ecologyShortHistory = np.empty([0, 4])
-		self.explorationShortHistory = np.empty([0, 3])
+		self.explorationShortHistory = np.empty([0, 4])
 
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
@@ -68,7 +68,7 @@ class Population(object):
 				ind.explore()
 				self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
 				self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
-				exploration = np.array([[self.ecoTime, ind.coordinates[0], ind.coordinates[1]]])
+				exploration = np.array([[self.ecoTime, ind.coordinates[0], ind.coordinates[1], ind.vigilance]])
 				addExploration = np.concatenate((self.explorationShortHistory, exploration))
 				self.explorationShortHistory = addExploration
 
@@ -185,7 +185,7 @@ class Population(object):
 		Reproduce individuals and update population.
 		"""
 		self.ecologyShortHistory = np.empty([0, 4]) # reset ecology history for new cycle
-		self.explorationShortHistory = np.empty([0, 3]) # reset ecology history for new cycle
+		self.explorationShortHistory = np.empty([0, 4]) # reset ecology history for new cycle
 
 		for steps in range(self.routineSteps):
 			self.routine()
