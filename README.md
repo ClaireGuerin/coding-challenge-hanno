@@ -88,7 +88,7 @@ Change parameter values in `parameters.txt`.
 
 ## Roadmap
 
-Next step for this program is a visualization of the movement of individuals on the grid, with individual vigilance and gird cell resources apparent. A full GUI would eventually be useful.
+Next step for this program is a visualization of the movement of individuals on the grid, with individual vigilance and gird cell resources apparent. A full GUI would eventually be useful. In later steps, testing for compatibility with other OS and distros would be ideal.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
