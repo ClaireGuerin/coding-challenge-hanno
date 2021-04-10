@@ -18,7 +18,7 @@ library(gganimate)
 #   rename(vigilance = value) %>%
 #   add_column(generations = time)
 
-vigilance <- read_csv("vigilance_out.txt", col_names = FALSE) 
+vigilance <- read_csv("output/vigilance_out.txt", col_names = FALSE) 
 time <- seq(1,nrow(vigilance))
 
 vigilance_data <- vigilance %>% 
@@ -34,10 +34,51 @@ vPlot <- vigilance_data %>%
   theme_minimal() +
   transition_reveal(generations)
 
-anim_save("vigilance_out.gif", vPlot)
+anim_save("output/vigilance_out.gif", vPlot)
 
 #==== Import ecosystem data ====
-#resources <- read_csv("resources_out.txt") 
-#movement <- read_csv("movement_out.txt") 
+resources <- read_table2("output/resources_out.txt", col_names = FALSE) 
+resource_data <- resources %>%
+  rename(time = X1, x = X2, y = X3, resource = X4)
 
-#==== Plot ecosystem ====
+# rPlot <- resource_data %>%
+#   ggplot(aes(x, y)) +
+#   geom_tile(aes(fill = resource)) +
+#   theme_classic() +
+#   scale_fill_continuous(type = "viridis") +
+#   transition_time(time) +
+#   labs(title = "Ecological time: {round(frame_time)}")
+
+movement <- read_table2("output/exploration_out.txt", col_names = FALSE) 
+movement_data <- movement %>%
+  rename(time = X1, x_pos = X2, y_pos = X3, vigilance = X4)
+
+# movement_data %>%
+#   ggplot(aes(x_pos, y_pos)) +
+#   geom_jitter() +
+#   theme_classic() +
+#   transition_time(time) +
+#   labs(title = "Ecological time: {round(frame_time)}")
+
+gPlot <- resource_data %>%
+  ggplot(aes(x, y)) +
+  geom_tile(aes(fill = resource)) +
+  geom_jitter(data = movement_data, 
+              mapping = aes(x_pos, y_pos, color = vigilance), 
+              size = 5, 
+              alpha = 0.8) +
+  theme(panel.grid = element_blank(),
+        panel.background = element_blank(),
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  scale_fill_continuous(type = "viridis") +
+  scale_color_gradient(low="white", 
+                       high="black") +
+  transition_time(time) +
+  labs(title = "Ecological time: {round(frame_time)}")
+
+# to add a wake that follows the dots movements, add:
+# shadow_wake(wake_length = 0.1) +
+
+anim_save("output/grid_out.gif", gPlot)

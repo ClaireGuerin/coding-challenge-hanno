@@ -12,6 +12,7 @@ import numpy as np
 import random as rd
 import logging
 import os
+import itertools as it
 
 class Population(object):
 
@@ -40,6 +41,10 @@ class Population(object):
 			n = self.nIndiv
 
 		self.deathCount = 0 # everyone is alive at the beginning of the simulation
+		self.ecoTime = 0 # ecological time set to zero at beginning of simulation
+		self.ecologyShortHistory = np.empty([0, 4])
+		self.explorationShortHistory = np.empty([0, 4])
+
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
 		for i in range(n):
@@ -63,6 +68,9 @@ class Population(object):
 				ind.explore()
 				self.ncell[ind.coordinates[0], ind.coordinates[1]] += 1
 				self.vcell[ind.coordinates[0], ind.coordinates[1]] += 1 - ind.vigilance
+				exploration = np.array([[self.ecoTime, ind.coordinates[0], ind.coordinates[1], ind.vigilance]])
+				addExploration = np.concatenate((self.explorationShortHistory, exploration))
+				self.explorationShortHistory = addExploration
 
 	def gatherAndSurvive(self):
 		""" Loop over all live individuals in the population and make them gather resources and survive.
@@ -83,9 +91,12 @@ class Population(object):
 	def routine(self):
 		""" Uses explore() and gatherAndSurvive() methods to implement full routine of a single time step.
 		Return nothing
+		Update self.ecoTime: increment ecological time by 1 unit
 		Update self.grid.share: resource share in each cell on the grid after exploration and before gathering
 		Update self.grid.resources: update amount of resources in each cell on the grid after gathering.
 		"""
+		self.ecoTime += 1
+
 		self.explore()
 
 		# share in a cell S = SUM(1-v_i)/(gamma*n)
@@ -106,6 +117,20 @@ class Population(object):
 		resourceConsumption = 1 - self.efficiency * shares
 		newResources = resourceGrowth * resourceConsumption
 		newResources[newResources > (200 / self.fecundity)] = self.initRes # resources crash when there's too much of it in a cell, and go back to initial amount.
+
+		tmpEcologyHistory = np.empty([self.gridSize * self.gridSize, 4])
+
+		pos = 0
+		for cell in it.product(range(self.gridSize), repeat=2):
+			tmpEcologyHistory[pos,0] = self.ecoTime
+			tmpEcologyHistory[pos,1] = cell[0]
+			tmpEcologyHistory[pos,2] = cell[1]
+			tmpEcologyHistory[pos,3] = newResources[cell[0], cell[1]]
+			pos += 1
+
+		addEcologicalHistory = np.concatenate((self.ecologyShortHistory, tmpEcologyHistory))
+		self.ecologyShortHistory = addEcologicalHistory
+
 		self.grid.resources = newResources
 		assert type(self.grid.resources) == np.ndarray
 
@@ -159,6 +184,9 @@ class Population(object):
 		Run the routine for self.routineSteps number of steps.
 		Reproduce individuals and update population.
 		"""
+		self.ecologyShortHistory = np.empty([0, 4]) # reset ecology history for new cycle
+		self.explorationShortHistory = np.empty([0, 4]) # reset ecology history for new cycle
+
 		for steps in range(self.routineSteps):
 			self.routine()
 
@@ -170,11 +198,18 @@ class Population(object):
 		Write out mean vigilance level over generation time in "vigilance.txt" file
 		Interrupt simulation if population extinct (self.deathCount = 0).
 		"""
-		with open("vigilance_out.txt", "w") as f:
+		if not os.path.exists('output'):
+			os.makedirs('output')
+
+		with open("output/vigilance_out.txt", "w", buffering=1) as vigilanceFile, \
+			open("output/resources_out.txt", "w", buffering=1) as resourcesFile, \
+			open("output/exploration_out.txt", "w", buffering=1) as explorationFile:
 
 			for gen in range(self.nGen):
 				self.lifeCycle()
-				f.write('{0}\n'.format(round(self.vigilance, 3)))
+				vigilanceFile.write('{0}\n'.format(round(self.vigilance, 3)))
+				np.savetxt(resourcesFile, self.ecologyShortHistory, fmt='%1.3f')
+				np.savetxt(explorationFile, self.explorationShortHistory, fmt='%1.3f')
 
 				if self.deathCount == self.nIndiv:
 					logging.info('Population extinct')

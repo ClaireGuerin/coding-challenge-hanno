@@ -248,41 +248,6 @@ class TestPopulationObject(object):
 
 		assert self.pop.deathCount == 10
 
-
-	def test_sim_stops_when_all_indivs_are_dead(self):
-		self.pop = Pop("test/test/parameters.txt")
-		self.pop.nGen = 5
-		self.pop.predation = 1
-		self.pop.create()
-
-		for ind in self.pop.individuals:
-			ind.vigilance = 0
-
-		self.pop.launch()
-		
-		#assert self.pop.deathCount == self.pop.nIndiv, "there are {0} unexpected survivors".format(self.pop.nIndiv - self.pop.deathCount)
-		with open("vigilance_out.txt", "r") as fOut:
-			lineCount = len(fOut.readlines())
-		assert lineCount == 1
-		os.remove("vigilance_out.txt")
-
-
-	# def test_pool_is_offspring_per_individual(self):
-	# 	self.pop = Pop(par="test/test/parameters.txt")
-	# 	self.pop.create()
-	# 	self.pop.routine()
-	# 	self.pop.reproduce()
-
-	# 	count = []
-
-	# 	for ind in range(self.pop.nIndiv):
-	# 		indiv = self.pop.individuals[ind]
-	# 		count.append(indiv.offspring)
-
-	# 	for ind in range(self.pop.nIndiv):
-	# 		indiv = self.pop.individuals[ind]
-	# 		assert indiv.offspring == self.pop.pool.count(ind), "wrong offspring number for individual {1} in {0}. Counts: {2}".format(self.pop.pool, ind, count)
-
 	def test_population_gets_updated_at_new_gen(self):
 		assert hasattr(Pop(), "update")
 		assert callable(getattr(Pop(), "update"))
@@ -343,3 +308,52 @@ class TestPopulationObject(object):
 		for cell in np.nditer(self.pop.grid.resources):
 			assert cell <= self.pop.initRes, "resources too large, should have crashed"
 
+	def test_population_keeps_track_of_ecological_time(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+
+		assert hasattr(self.pop, "ecoTime"), "population must keep track of its ecological time!"
+
+	def test_ecological_time_correctly_assessed(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		self.pop.lifeCycle()
+		ngen = 5
+
+		assert self.pop.ecoTime == self.pop.routineSteps, "one life cycle should be {0} units of ecological time, not {1}".format(self.pop.routineSteps, self.pop.ecoTime)
+
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		for i in range(ngen):
+			self.pop.lifeCycle()
+
+		assert self.pop.ecoTime == self.pop.routineSteps * ngen, "{2} life cycles should be {0} units of ecological time, not {1}".format(self.pop.routineSteps * 10, self.pop.ecoTime, ngen)
+
+	def test_population_keeps_track_of_resources_over_life_cycle(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+
+		assert hasattr(self.pop, "ecologyShortHistory"), "population must keep track of its ecological history!"
+
+	def test_resources_info_augmented_at_each_routine(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		for i in range(self.pop.routineSteps):
+			self.pop.routine()
+
+		assert self.pop.ecologyShortHistory.shape == ((self.pop.gridSize ** 2) * self.pop.routineSteps, 4)
+
+	def test_population_keeps_track_of_exploration_over_life_cycle(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+
+		assert hasattr(self.pop, "explorationShortHistory"), "population must keep track of its exploration history!"
+
+	def test_exploration_info_augmented_at_each_routine(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.predation = 0
+		self.pop.create()
+		for i in range(self.pop.routineSteps):
+			self.pop.routine()
+
+		assert self.pop.explorationShortHistory.shape == (self.pop.nIndiv * self.pop.routineSteps, 4)
