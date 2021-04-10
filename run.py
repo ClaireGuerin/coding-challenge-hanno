@@ -1,5 +1,6 @@
 from model.population import Population as Pop
 
-pop = Pop(dev='on')
+pop = Pop()
 pop.create()
 pop.launch()
+# pop.launch(dev='on')

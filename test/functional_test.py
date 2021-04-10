@@ -56,6 +56,42 @@ class TestSimpleRun(object):
 		os.remove('output/resources_out.txt')
 		os.remove('output/exploration_out.txt')
 
+	# However, all individuals in the simulation die, leading to population extinction. The simulation stops and the output files are shorter.
+
+	def test_simulation_stops_when_all_indivs_are_dead(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.nGen = 5
+		self.pop.predation = 1
+		self.pop.create()
+
+		for ind in self.pop.individuals:
+			ind.vigilance = 0
+
+		self.pop.launch()
+		
+		#assert self.pop.deathCount == self.pop.nIndiv, "there are {0} unexpected survivors".format(self.pop.nIndiv - self.pop.deathCount)
+		with open("output/vigilance_out.txt", "r") as fOut:
+			lineCount = len(fOut.readlines())
+		assert lineCount == 1
+		os.remove("output/vigilance_out.txt")
+		os.remove("output/resources_out.txt")
+		os.remove("output/exploration_out.txt")
+
+
 	# The resources output file contains exactly the number of lines that corresponds to the number of combinations of total routine time steps * grid * grid
+
+	def test_resources_output_right_length(self):
+		self.pop = Pop("test/test/parameters.txt")
+		self.pop.nGen = 5
+		self.pop.predation = 0
+		self.pop.create()
+		self.pop.launch()
+		
+		with open("output/resources_out.txt", "r") as fOut:
+			lineCount = len(fOut.readlines())
+		assert lineCount == self.pop.nGen * self.pop.routineSteps * self.pop.gridSize * self.pop.gridSize
+		os.remove("output/vigilance_out.txt")
+		os.remove("output/resources_out.txt")
+		os.remove("output/exploration_out.txt")
 
 	# A message is generated, informing the user that the simulation has successfully completed.

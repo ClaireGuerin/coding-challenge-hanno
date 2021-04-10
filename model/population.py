@@ -12,6 +12,7 @@ import numpy as np
 import random as rd
 import logging
 import os
+import itertools as it
 
 class Population(object):
 
@@ -41,6 +42,8 @@ class Population(object):
 
 		self.deathCount = 0 # everyone is alive at the beginning of the simulation
 		self.ecoTime = 0 # ecological time set to zero at beginning of simulation
+		self.ecologyShortHistory = np.empty([0, 4])
+
 		self.grid = Grid(dim=self.gridSize, init=self.initRes)
 		self.individuals = []
 		for i in range(n):
@@ -110,6 +113,20 @@ class Population(object):
 		resourceConsumption = 1 - self.efficiency * shares
 		newResources = resourceGrowth * resourceConsumption
 		newResources[newResources > (200 / self.fecundity)] = self.initRes # resources crash when there's too much of it in a cell, and go back to initial amount.
+
+		tmpEcologyHistory = np.empty([self.gridSize * self.gridSize, 4])
+
+		pos = 0
+		for cell in it.product(range(self.gridSize), repeat=2):
+			tmpEcologyHistory[pos,0] = self.ecoTime
+			tmpEcologyHistory[pos,1] = cell[0]
+			tmpEcologyHistory[pos,2] = cell[1]
+			tmpEcologyHistory[pos,3] = newResources[cell[0], cell[1]]
+			pos += 1
+
+		tmpHistory = np.concatenate((self.ecologyShortHistory, tmpEcologyHistory))
+		self.ecologyShortHistory = tmpHistory
+
 		self.grid.resources = newResources
 		assert type(self.grid.resources) == np.ndarray
 
@@ -163,6 +180,8 @@ class Population(object):
 		Run the routine for self.routineSteps number of steps.
 		Reproduce individuals and update population.
 		"""
+		self.ecologyShortHistory = np.empty([0, 4]) # reset ecology history for new cycle
+
 		for steps in range(self.routineSteps):
 			self.routine()
 
@@ -181,7 +200,7 @@ class Population(object):
 			for gen in range(self.nGen):
 				self.lifeCycle()
 				vigilanceFile.write('{0}\n'.format(round(self.vigilance, 3)))
-				resourcesFile.write('boo\n')
+				np.savetxt(resourcesFile, self.ecologyShortHistory, fmt='%1.3f')
 				explorationFile.write('baa\n')
 
 				if self.deathCount == self.nIndiv:

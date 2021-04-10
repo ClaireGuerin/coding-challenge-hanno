@@ -248,27 +248,6 @@ class TestPopulationObject(object):
 
 		assert self.pop.deathCount == 10
 
-
-	def test_sim_stops_when_all_indivs_are_dead(self):
-		self.pop = Pop("test/test/parameters.txt")
-		self.pop.nGen = 5
-		self.pop.predation = 1
-		self.pop.create()
-
-		for ind in self.pop.individuals:
-			ind.vigilance = 0
-
-		self.pop.launch()
-		
-		#assert self.pop.deathCount == self.pop.nIndiv, "there are {0} unexpected survivors".format(self.pop.nIndiv - self.pop.deathCount)
-		with open("output/vigilance_out.txt", "r") as fOut:
-			lineCount = len(fOut.readlines())
-		assert lineCount == 1
-		os.remove("output/vigilance_out.txt")
-		os.remove("output/resources_out.txt")
-		os.remove("output/exploration_out.txt")
-
-
 	# def test_pool_is_offspring_per_individual(self):
 	# 	self.pop = Pop(par="test/test/parameters.txt")
 	# 	self.pop.create()
@@ -365,10 +344,18 @@ class TestPopulationObject(object):
 			self.pop.lifeCycle()
 
 		assert self.pop.ecoTime == self.pop.routineSteps * ngen, "{2} life cycles should be {0} units of ecological time, not {1}".format(self.pop.routineSteps * 10, self.pop.ecoTime, ngen)
-	# def test_resources_change_data_kept_over_time(self):
-	# 	self.pop = Pop(par="test/test/parameters.txt")
-	# 	self.pop.create()
-	# 	self.pop.routine()
 
-	# 	assert False, "write this test"
+	def test_population_keeps_track_of_resources_over_life_cycle(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		self.pop.routine()
 
+		assert hasattr(self.pop, "ecologyShortHistory"), "population must keep track of its ecological history!"
+
+	def test_resources_info_augmented_at_each_routine(self):
+		self.pop = Pop(par="test/test/parameters.txt")
+		self.pop.create()
+		for i in range(self.pop.routineSteps):
+			self.pop.routine()
+
+		assert self.pop.ecologyShortHistory.shape == ((self.pop.gridSize ** 2) * self.pop.routineSteps,4)
