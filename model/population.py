@@ -10,7 +10,6 @@ from model.individual import Individual as Ind
 from model.grid import Grid
 import numpy as np
 import random as rd
-import matplotlib.pyplot as plt
 import logging
 import os
 
