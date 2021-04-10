@@ -18,7 +18,7 @@ library(gganimate)
 #   rename(vigilance = value) %>%
 #   add_column(generations = time)
 
-vigilance <- read_csv("vigilance_out.txt", col_names = FALSE) 
+vigilance <- read_csv("output/vigilance_out.txt", col_names = FALSE) 
 time <- seq(1,nrow(vigilance))
 
 vigilance_data <- vigilance %>% 
@@ -34,7 +34,7 @@ vPlot <- vigilance_data %>%
   theme_minimal() +
   transition_reveal(generations)
 
-anim_save("vigilance_out.gif", vPlot)
+anim_save("output/vigilance_out.gif", vPlot)
 
 #==== Import ecosystem data ====
 #resources <- read_csv("resources_out.txt") 

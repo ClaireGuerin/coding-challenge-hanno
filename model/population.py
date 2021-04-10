@@ -170,9 +170,9 @@ class Population(object):
 		Write out mean vigilance level over generation time in "vigilance.txt" file
 		Interrupt simulation if population extinct (self.deathCount = 0).
 		"""
-		with open("vigilance_out.txt", "w", buffering=1) as vigilanceFile, \
-			open("resources_out.txt", "w", buffering=1) as resourcesFile, \
-			open("exploration_out.txt", "w", buffering=1) as explorationFile:
+		with open("output/vigilance_out.txt", "w", buffering=1) as vigilanceFile, \
+			open("output/resources_out.txt", "w", buffering=1) as resourcesFile, \
+			open("output/exploration_out.txt", "w", buffering=1) as explorationFile:
 
 			for gen in range(self.nGen):
 				self.lifeCycle()

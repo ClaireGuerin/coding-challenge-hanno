@@ -27,14 +27,14 @@ class TestSimpleRun(object):
 		self.population = Pop(par="test/test/parameters.txt")
 		self.population.create()
 		self.population.launch()
-		self.filesListRootOut = os.listdir(".")
+		self.filesListRootOut = os.listdir("./output")
 
 		assert "vigilance_out.txt" in self.filesListRootOut, "no vigilance output file"
 		assert "resources_out.txt" in self.filesListRootOut, "no resources output file"
 		assert "exploration_out.txt" in self.filesListRootOut, "no exploration output file"
-		os.remove('vigilance_out.txt')
-		os.remove('resources_out.txt')
-		os.remove('exploration_out.txt')
+		os.remove('output/vigilance_out.txt')
+		os.remove('output/resources_out.txt')
+		os.remove('output/exploration_out.txt')
 
 	# The vigilance output file contains exactly the number of lines that corresponds to the number of generations
 
@@ -48,11 +48,13 @@ class TestSimpleRun(object):
 		for ind in self.population.individuals:
 			assert ind.alive
 
-		with open("vigilance_out.txt", "r") as fOut:
+		with open("output/vigilance_out.txt", "r") as fOut:
 			lineCount = len(fOut.readlines())
 
 		assert lineCount == 10, "wrong number of lines from file reading"
-		os.remove('vigilance_out.txt')
+		os.remove('output/vigilance_out.txt')
+		os.remove('output/resources_out.txt')
+		os.remove('output/exploration_out.txt')
 
 	# The resources output file contains exactly the number of lines that corresponds to the number of combinations of total routine time steps * grid * grid
 
