@@ -51,19 +51,20 @@ apt-get install -y xdg-utils
 ```
 
 ## Usage
+
+Run simulation with command line `python run.py` or `python run.py on` for visuals.
+
 ```python
 from model.population import Population as Pop
 
-pop = Pop()
+pop = Pop(par="my/custom/path.txt", v=0.2) # Give custom path to parameters file with par (default:"parameters.txt"). Set initial level of vigilance in population with v (default: 0.5). 
 pop.create()
-pop.launch(dev='on')
+pop.launch(dev='on') # turn visualisation on/off with dev. 
 ```
-You can directly run this code from the root with `python run.py`. 
-The program will create:
-- a text file with vigilance means over generation times (`vigilance_out.txt`).
-- an animated visualisation of the evolution of vigilance (`vigilance_out.gif`).
 
-*Turn dev `'on'` and `'off'` depending on whether you want the visual output.*
+The program will create an output folder to store:
+- output text files with vigilance means over generation times (`vigilance_out.txt`), resources change (`resources_out.txt`) and individual movement (`exploration_out.txt`) over ecological time.
+- animated visualisations of the evolution of vigilance (`vigilance_out.gif`) and individual movement and resources on the grid (`grid_out.txt`).
 
 ### Parameters
 Change parameter values in `parameters.txt`.
