@@ -11,7 +11,11 @@ develop|[![Build Status](https://www.travis-ci.com/ClaireGuerin/coding-challenge
 
 ## Visual
 
-![eanim](gifs/ecosystem.gif)![vanim](gifs/vigilance.gif)
+Exploration                  | Trait evolution
+:---------------------------:|:----------------------------:
+![eanim](gifs/ecosystem.gif) | ![vanim](gifs/vigilance.gif)
+
+
 
 ## Model description
 
