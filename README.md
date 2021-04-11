@@ -95,7 +95,7 @@ Change parameter values in `parameters.txt`.
 
 ## Roadmap
 
-A full GUI would eventually be useful. In later steps, testing for compatibility with other OS and distros would be ideal.
+The next immediate challenge is to synchronise the grid visual (ecological time) and the vigilance level figure (generation time). A full GUI would eventually be useful. In later steps, testing for compatibility with other OS and distros would be ideal.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
