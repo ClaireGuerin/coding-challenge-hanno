@@ -15,8 +15,6 @@ Exploration                  | Trait evolution
 :---------------------------:|:----------------------------:
 ![eanim](gifs/ecosystem.gif) | ![vanim](gifs/vigilance.gif)
 
-
-
 ## Model description
 
 In this model, a population of prey roams around and collects resources from a bounded ecosystem. The ecosystem is a squared grid of a defined size. Predation risk is constant and diffused over the whole grid. Over a specific amount of time steps, an individual will repeat a routine as follows:
