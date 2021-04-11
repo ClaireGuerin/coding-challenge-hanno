@@ -52,7 +52,7 @@ apt-get install -y xdg-utils
 
 ## Usage
 
-Run simulation with command line `python run.py` or `python run.py on` for visuals.
+Run simulation with command line `python run.py` or `python run.py on` for visuals. For more flexibility:
 
 ```python
 from model.population import Population as Pop
