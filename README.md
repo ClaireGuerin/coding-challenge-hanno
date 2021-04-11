@@ -42,17 +42,18 @@ After a number of time steps (user-defined), the individuals who survived reprod
 Simply download this repository and place wherever convenient on your machine.
 
 ## Requirements
-This code was developped for Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and requires SciPy. To install Python, follow [these guidelines](https://docs.python-guide.org/starting/install3/linux/). To install the SciPy package on Linux, run `python -m pip install --user scipy`.
+This code was developped under Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and requires SciPy. To install Python, follow [these guidelines](https://docs.python-guide.org/starting/install3/linux/). To install the SciPy package on Ubuntu, run `python -m pip install --user scipy`.
 
-For visual output (`dev='on'`), Rust and xdg-utils are required. To install, run
+For visual output (`dev='on'`), Rust and xdg-utils are required. To install on Ubuntu, run
 ```shell
+sudo apt-get update -y
 apt-get install cargo
 apt-get install -y xdg-utils
 ```
 
 ## Usage
 
-Run simulation with command line `python run.py` or `python run.py on` for visuals. For more flexibility:
+Run simulation with command line `python run.py` or `python run.py on` for visuals. Depending on how python is set up on your machine, you might need to type `python3` instead of `python`. For more flexibility:
 
 ```python
 from model.population import Population as Pop
@@ -104,6 +105,7 @@ Please make sure to update and write tests for each contribution using pytest, a
 ## Authors and acknowledgements
 General description of the model by Hanno Hildenbrandt.
 Equations and code by Claire Guerin.
+Thanks to Raphaël Scherrer for trying the programme on his machine.
 
 ## License
 
