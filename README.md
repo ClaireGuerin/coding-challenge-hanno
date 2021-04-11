@@ -19,7 +19,7 @@ Exploration                  | Trait evolution
 
 ## Model description
 
-In this model, a population of preys roams around and collects resources from a bounded ecosystem. The ecosystem is a squared grid of a defined size. Predation risk is constant and diffused over the whole grid. Over a specific amount of time steps, an individual will repeat a routine as follows:
+In this model, a population of prey roams around and collects resources from a bounded ecosystem. The ecosystem is a squared grid of a defined size. Predation risk is constant and diffused over the whole grid. Over a specific amount of time steps, an individual will repeat a routine as follows:
 
 1. move on the ecosystem grid by one step, that is to say to a neighbouring grid cell. The destination cell is chosen randomly from the neighbouring cells (including the origin cell: the individual can stay on the same cell over one time step).
 2. gather resources within their current cell, and add them to their storage. Let us consider there is a total of R resources in the cell at the time. When there are several individuals in the cell, they share the resources fairly as follows:
@@ -31,7 +31,7 @@ Where alpha is the gathering efficiency, n is the number of individuals in the c
 
 <img src="https://latex.codecogs.com/svg.latex?p(1-v_i)" title="p(1-v_i)" />
 
-Resources in a cell grow at each time step at a growth rate r. If the cell was empty and hence not raided for resources by the preys, the amount of resources in the cell at the next time step is R x r. Otherwise, it is:
+Resources in a cell grow at each time step at a growth rate r. If the cell was unoccupied and resources conserved, the amount of resources in the cell at the next time step is R x r. Otherwise, it is:
 
 <img src="https://latex.codecogs.com/svg.latex?R(1-\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma})r" title="R(1-\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma})r" />
 
@@ -46,10 +46,11 @@ Simply download this repository and place wherever convenient on your machine.
 ## Requirements
 This code was developped for Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and requires SciPy. To install Python, follow [these guidelines](https://docs.python-guide.org/starting/install3/linux/). To install the SciPy package on Linux, run `python -m pip install --user scipy`.
 
-For visual output (`dev='on'`), Rust is required. To install, run:
-- `yum install cargo` (Fedora/CentOS)
-- `apt-get install cargo` (Debian/Ubuntu)
-- `brew install rust` (MacOS)
+For visual output (`dev='on'`), Rust and xdg-utils are required. To install, run
+```shell
+apt-get install cargo
+apt-get install -y xdg-utils
+```
 
 ## Usage
 ```python
@@ -59,10 +60,12 @@ pop = Pop()
 pop.create()
 pop.launch(dev='on')
 ```
-You can directly run this code from the root with `python run.py`.
+You can directly run this code from the root with `python run.py`. 
 The program will create:
 - a text file with vigilance means over generation times (`vigilance_out.txt`).
 - an animated visualisation of the evolution of vigilance (`vigilance_out.gif`).
+
+*Turn dev `'on'` and `'off'` depending on whether you want the visual output.*
 
 ### Parameters
 Change parameter values in `parameters.txt`.
@@ -93,7 +96,7 @@ Change parameter values in `parameters.txt`.
 
 ## Roadmap
 
-Next step for this program is a visualization of the movement of individuals on the grid, with individual vigilance and gird cell resources apparent. A full GUI would eventually be useful. In later steps, testing for compatibility with other OS and distros would be ideal.
+A full GUI would eventually be useful. In later steps, testing for compatibility with other OS and distros would be ideal.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
