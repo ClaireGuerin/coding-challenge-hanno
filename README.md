@@ -52,9 +52,9 @@ from model.population import Population as Pop
 
 pop = Pop()
 pop.create()
-pop.launch(dev='on')
+pop.launch(dev='off') # turn visualisation on by setting dev='on'
 ```
-You can directly run this code from the root with `python run.py`.
+You can directly run this code from the root with `python run.py` or `python run.py on` for visuals.
 The program will create:
 - a text file with vigilance means over generation times (`vigilance_out.txt`).
 - an animated visualisation of the evolution of vigilance (`vigilance_out.gif`).
