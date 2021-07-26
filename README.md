@@ -25,6 +25,7 @@ In this model, a population of prey roams around and collects resources from a b
 <img src="https://latex.codecogs.com/svg.latex?R\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma}" title="R\alpha\frac{\sum_{i=1}^n(1-v_i)}{n\gamma}" />
 
 Where alpha is the gathering efficiency, n is the number of individuals in the cell, gamma is the competition level and v is the individual's vigilance level against predation. Vigilance is an evolving trait subject to mutation and natural selection, and is continuous (from 0 to 1). Kin selection being virtually inexistant in this model, and the sharing of resources representing a form of public good game, one could expect vigilance to tend to zero over time. However, vigilance is also under positive selection as it increases an individual's chances of survival.
+
 3. the individual dies due to predation or survives to the next time step. The predation risk p is constant, and is defined by the probability for a prey to be eaten by a predator, in absence of vigilance. An individual's vigilance mitigates this risk, so that the probability to die at this time step is:
 
 <img src="https://latex.codecogs.com/svg.latex?p(1-v_i)" title="p(1-v_i)" />
