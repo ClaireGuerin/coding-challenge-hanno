@@ -1,5 +1,5 @@
 # coding-challenge-hanno
-Coding challenge assigned by Hanno Hildenbrandt for a programmer position at RUG.
+Coding challenge assigned by Hanno Hildenbrandt for a programmer position at RUG (Python version).
 
 ## Testing
 This program is developped through Test-Driven Development ([TDD](https://en.wikipedia.org/wiki/Test-driven_development)). Tests are run locally and on Travis CI for the main branch and the develop branch. When tests are all passing, you see a green `passing` badge in the table below, otherwise you see a red `failing` badge. Click on the badge for details. The percentage of the code that is covered by tests is assessed with CodeCov and indicated in the table below. Click on it for coverage statistics, details and graphs.
