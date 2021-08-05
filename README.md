@@ -45,7 +45,7 @@ Simply download this repository and place wherever convenient on your machine.
 ## Requirements
 This code was developped under Linux (Ubuntu 20.04.2 LTS) under Python 3.7.3, and requires SciPy. To install Python, follow [these guidelines](https://docs.python-guide.org/starting/install3/linux/). To install the SciPy package on Ubuntu, run `python -m pip install --user scipy`.
 
-For visual output (`dev='on'`), download [this R code](https://github.com/ClaireGuerin/anim-vigil). Rust and xdg-utils are required. To install on Ubuntu, run
+For visual output (`dev='on'`), download [this R code](https://github.com/ClaireGuerin/anim-vigil) into the root of this repository. Rust and xdg-utils are required. To install on Ubuntu, run
 ```shell
 sudo apt-get update -y
 apt-get install cargo
