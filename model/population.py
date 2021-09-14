@@ -151,9 +151,14 @@ class Population(object):
 				offspring.append(ind.offspring)
 				assert offspring[-1] == ind.offspring, "wrong order in offspring number"
 
-		self.nextGeneration = rd.choices(population=range(self.nIndiv),
-			weights=offspring,
-			k=self.nIndiv)
+		try:
+			assert sum(offspring) > 0, "No offspring produced"
+			self.nextGeneration = rd.choices(population=range(self.nIndiv),
+											 weights=offspring,
+											 k=self.nIndiv)
+		except AssertionError as e:
+			self.deathCount = self.nIndiv
+			print(e)
 
 	def update(self):
 		""" Update population
@@ -212,7 +217,7 @@ class Population(object):
 				np.savetxt(explorationFile, self.explorationShortHistory, fmt='%1.3f')
 
 				if self.deathCount == self.nIndiv:
-					logging.info('Population extinct')
+					logging.info('Population extinct at generation {}'.format(gen))
 					break
 				else:
 					self.deathCount = 0
