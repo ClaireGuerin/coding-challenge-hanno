@@ -227,7 +227,7 @@ class Population(object):
 
 		if dev=="on":
 			logging.info('Creating visuals...')
-			os.system("Rscript anim-vigil/animate_sim.r")
+			os.system("Rscript anim-vigil/animate_sim.r output/")
 			os.system("xdg-open output/vigilance_out.gif")
 			os.system("xdg-open output/grid_out.gif")
 

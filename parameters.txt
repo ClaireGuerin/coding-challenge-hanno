@@ -1,5 +1,5 @@
-gridSize,100
-nIndiv,200
+gridSize,10
+nIndiv,20
 nGen,100
 routineSteps,4
 mutRate,0.1
