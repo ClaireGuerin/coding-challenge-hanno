@@ -153,6 +153,7 @@ class Population(object):
 
 		try:
 			assert sum(offspring) > 0, "No offspring produced"
+			# random.choices: Changed in version 3.9: Raises a ValueError if all weights are zero.
 			self.nextGeneration = rd.choices(population=range(self.nIndiv),
 											 weights=offspring,
 											 k=self.nIndiv)
@@ -212,9 +213,9 @@ class Population(object):
 
 			for gen in range(self.nGen):
 				self.lifeCycle()
-				vigilanceFile.write('{0}\n'.format(round(self.vigilance, 3)))
-				np.savetxt(resourcesFile, self.ecologyShortHistory, fmt='%1.3f')
-				np.savetxt(explorationFile, self.explorationShortHistory, fmt='%1.3f')
+				vigilanceFile.write('{0},{1}\n'.format(gen, round(self.vigilance, 3)))
+				np.savetxt(resourcesFile, self.ecologyShortHistory, delimiter=',') #fmt='%1.3f'
+				np.savetxt(explorationFile, self.explorationShortHistory, delimiter=',') #fmt='%1.3f'
 
 				if self.deathCount == self.nIndiv:
 					logging.info('Population extinct at generation {}'.format(gen))
